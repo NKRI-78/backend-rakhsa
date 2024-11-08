@@ -10,8 +10,6 @@ const port = config.port
 const cors = require("cors")
 const routerNav = require("./src/index")
 
-require("./src/cron_job.js")
-
 app.use(fileUpload())
 app.use(logger("dev"))
 app.use(helmet())
