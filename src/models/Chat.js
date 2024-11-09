@@ -1,0 +1,174 @@
+const conn = require('../configs/db')
+
+module.exports = {
+
+    checkConversation: (senderId, receiverId) => {
+        return new Promise((resolve, reject) => {
+            const query = `SELECT uid FROM chats 
+            WHERE sender_id = ? AND receiver_id = ?
+            OR receiver_id = ? AND sender_id = ?`
+
+            conn.query(query, [senderId, receiverId, senderId, receiverId], (e, result) => {
+                if(e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+    },
+    
+    getChat: (chatId, receiverId) => {
+        return new Promise ((resolve, reject) => {
+            const query = `SELECT c.uid AS chat_id, p.user_id, p.fullname, p.avatar,
+            uo.is_online, uo.last_active
+            FROM chats c, users u
+            INNER JOIN profiles p ON p.user_id = u.uid
+            INNER JOIN user_onlines uo ON p.user_id = uo.user_id
+            WHERE  
+            CASE 
+                WHEN c.sender_id = ?
+                THEN c.receiver_id = p.user_id
+                WHEN c.receiver_id = ?
+                THEN c.sender_id = p.user_id
+            END
+            AND c.uid = ?` 
+            conn.query(query, [receiverId, receiverId, chatId], (e, result) => {
+                if(e) { 
+                    reject(new Error(e))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+    },
+
+    getChats: (senderId) => {
+        return new Promise ((resolve, reject) => {
+            const query = `SELECT c.uid AS chat_id, p.user_id, p.fullname, p.avatar
+            FROM chats c, users u
+            INNER JOIN profiles p ON p.user_id = u.uid
+            WHERE  
+            CASE 
+                WHEN c.sender_id = ?
+                THEN c.receiver_id = p.user_id
+                WHEN c.receiver_id = ?
+                THEN c.sender_id = p.user_id
+            END`
+
+            conn.query(query, [senderId, senderId], (e, result) => {
+                if(e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+    },
+
+    getMessages: (chatId, sender) => {
+        return new Promise ((resolve, reject) => {
+            // const query = `SELECT 
+            // m.uid,
+            // u.name AS sender_name,
+            // m.sender_id, m.receiver_id,
+            // m.sent_time, m.content, m.image, 
+            // emt.name type, m.is_read
+            // FROM messages m 
+            // LEFT JOIN products p ON m.product_id = p.uid
+            // LEFT JOIN soft_delete_messages sdm ON sdm.message_id = m.uid
+            // INNER JOIN users u ON m.sender_id = u.uid
+            // INNER JOIN chats c ON c.uid = m.chat_id
+            // INNER JOIN enum_message_types emt ON emt.uid = m.type
+            // WHERE c.uid = '${chatId}' 
+            // AND (m.sender_id = '${sender}' 
+            // OR m.receiver_id = '${sender}')
+            // AND (sdm.message_id IS NULL OR sdm.user_id != '${sender}')
+            // ORDER BY m.sent_time DESC`
+
+            const query = `SELECT 
+            p.fullname AS sender_name,
+            p.avatar,
+          	m.content, 
+            m.created_at,
+            mt.name type, m.uid AS msg_id, ma.name AS ack, c.uid AS chat_id, m.sender_id, m.receiver_id, m.created_at
+            FROM messages m 
+            INNER JOIN profiles p ON m.sender_id = p.user_id 
+            INNER JOIN chats c ON c.uid = m.chat_id
+            INNER JOIN message_acks ma ON ma.id = m.ack
+            INNER JOIN message_types mt ON mt.id = m.type
+            WHERE c.uid = '${chatId}' 
+            AND (m.sender_id = '${sender}' 
+            OR m.receiver_id = '${sender}')
+            ORDER BY m.created_at DESC`
+
+            conn.query(query, (e, result) => {
+                if(e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+    },
+
+    getLastMessage: (chatId) => {
+        return new Promise ((resolve, reject) => {
+            const query = `SELECT m.uid, m.content, 
+            mt.name type, m.created_at, ma.name AS ack, m.sender_id
+            FROM messages m 
+            INNER JOIN message_acks ma ON ma.id = m.ack
+            INNER JOIN chats c ON c.uid = m.chat_id
+            INNER JOIN message_types mt ON mt.id = m.type
+            WHERE c.uid = ? 
+            ORDER BY m.created_at DESC 
+            LIMIT 1`
+
+            conn.query(query, [chatId], (e, result) => {
+                if(e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+    },
+
+    getMessageUnread: (chatId) => {
+        return new Promise ((resolve, reject) => {
+            const query = `SELECT m.uid
+            FROM messages m 
+            INNER JOIN chats c ON c.uid = m.chat_id
+            INNER JOIN message_types mt ON mt.id = m.type
+            WHERE c.uid = ? AND m.ack = 2`
+
+            conn.query(query,  [chatId], (e, result) => {
+                if(e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+    },
+
+
+    getContact: (userId) => {
+        return new Promise ((resolve, reject) => {
+            const query = `SELECT u.uid, u.image, u.name, ut.token, u.is_online, u.last_active 
+            FROM users u
+            LEFT JOIN user_tokens ut ON ut.user_id = u.uid
+            WHERE u.uid != ?`
+
+            conn.query(query, [userId], (e, result) => {
+                if(e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+    },
+
+
+}
