@@ -18,8 +18,8 @@ module.exports = {
     states: (continentId) => {
         return new Promise((resolve, reject) => {
             var query = `SELECT name FROM states 
-            WHERE continent_id = '${continentId}'`
-            conn.query(query, (e, result) => {
+            WHERE continent_id = ?`
+            conn.query(query, [continentId], (e, result) => {
                 if (e) {
                     reject(new Error(e))
                 } else {
@@ -28,5 +28,21 @@ module.exports = {
             })
         })
     },
+
+    cities: (continentId, stateId) => {
+        return new Promise((resolve, reject) => {
+            var query = `SELECT id, name FROM cities
+                WHERE continent_id = ?
+                AND state_id = ?
+            `
+            conn.query(query, [continentId, stateId], (e, result) => {
+                if(e) {
+                    reject(new Error(e))
+                } else {    
+                    resolve(result)
+                }
+            })
+        })
+    }
 
 }

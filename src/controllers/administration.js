@@ -26,10 +26,13 @@ module.exports = {
         }
     },
 
-    states: async (_, res) => {
+    states: async (req, res) => {
         try {
 
-            var states = await Administration.states()
+            if(typeof req.body.continent_id == "undefined" || req.body.continent_id == "")
+                throw new Error("Field continent_id is required")
+
+            var states = await Administration.states(req.body.continent_id)
 
             var data = []
 
@@ -46,8 +49,40 @@ module.exports = {
             misc.response(res, 200, false, "", data)
         } catch (e) {
             console.log(e)
-            misc.response(res, 400, true, "Server error")
+            misc.response(res, 400, true, e.message)
         }
     },
+
+    cities: async (req, res) => {
+        try {
+
+            if(typeof req.body.continent_id == "undefined" || req.body.continent_id == "")
+                throw new Error("Field continent_id is required")
+
+            if(typeof req.body.state_id == "undefined" || req.body.state == "")
+                throw new Error("Field state_id is required")
+
+            var cities = await Administration.cities(
+                req.body.continent_id,
+                req.body.state_id
+            )
+
+            var data = []
+
+            for (const i in cities) {
+                var city = cities[i]
+
+                data.push({
+                    id: city.id,
+                    name: city.name
+                })
+            }
+
+            misc.response(res, 200, false, "", data)
+        } catch(e) {
+            console.log(e)
+            misc.response(res, 400, true, e.message)
+        }
+    }
 
 }
