@@ -38,6 +38,21 @@ module.exports = {
         return text.replace(/<[^>]*>?/gm, '')
     },
 
+    countryCompareContinent(country) {
+        var val = ""
+        
+        switch(country) {
+            case "United States": 
+                val = "Amerika Utara"
+            break;
+            case "Japan": 
+                val = "Asia"
+            break;
+        }
+
+        return val
+    },  
+
     getInitials(string) {
         var names = string.split(' '),
             initials = names[0].substring(0, 1).toUpperCase()
