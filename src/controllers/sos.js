@@ -6,7 +6,7 @@ const User = require('../models/User')
 
 module.exports = {
     
-    list: async (req, res) => {
+    list: async (_, res) => {
         try {
 
             var sos = await Sos.list()
