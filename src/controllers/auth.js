@@ -8,6 +8,7 @@ const jwt = require('jsonwebtoken')
 const misc = require("../helpers/response")
 const utils = require("../helpers/utils")
 const Role = require('../models/Role')
+const { generateOTP } = require('../configs/otp')
 
 module.exports = {
 
@@ -24,6 +25,14 @@ module.exports = {
 
             if(login.length == 0)
                 throw new Error("User not found")
+
+            if (login[0].enabled == 0) {
+                var otp = generateOTP()
+                await Promise.race([
+                    Auth.updateOtp(otp, login[0].email),
+                    utils.sendEmail(login[0].email, otp)
+                ])
+            }
 
             var passwordDb = login[0].password 
 
@@ -81,10 +90,20 @@ module.exports = {
             if(typeof req.body.password == "undefined" || req.body.password == "")
                 throw new Error("Field password is required")
 
+            var roles = await Role.findById(3)
+
+            if(roles.length == 0)
+                throw new Error("Role not found")
+
+            var otp = generateOTP()
+
+            var passwordHash = await utils.encryptPassword(req.body.password)
+
             await Auth.registerMember(
                 userId,
+                otp,
                 req.body.email,
-                req.body.password
+                passwordHash
             )
 
             await User.registerMember(
@@ -94,10 +113,15 @@ module.exports = {
                 req.body.emergency_contact
             )
 
-            var roles = await Role.findById(3)
+            await Role.insertUserRole(
+                userId,
+                3
+            )
 
-            if(roles.length == 0)
-                throw new Error("Role not found")
+            await utils.sendEmail(
+                req.body.email, 
+                otp
+            )
 
             var role = roles[0]
 
@@ -122,6 +146,105 @@ module.exports = {
                 }
             })
 
+        } catch (e) {
+            console.log(e)
+            misc.response(res, 400, true, e.message)
+        }
+    },
+
+    verifyOtp: async (req, res) => {
+        const { email, otp } = req.body
+
+        try {
+
+            if (typeof email == "undefined" || email == "")
+                throw new Error("Field email is required")
+
+            if (typeof otp == "undefined" || otp == "")
+                throw new Error("Field otp is required")
+
+            if (!utils.validateEmail(email))
+                throw new Error("Invalid format E-mail Address. Etc : johndoe@gmail.com")
+
+            var checkEmail = await Auth.checkEmail(email)
+
+            var isEmailAlreadyActive = await Auth.isEmailAlreadyActive(email)
+
+            if (isEmailAlreadyActive.length != 0)
+                throw new Error("E-mail Address sudah aktif")
+
+            if (checkEmail.length != 0) {
+
+                var checkOtpIsValid = await Auth.checkOtp(email, otp)
+
+                if (checkOtpIsValid.length == 0)
+                    throw new Error("OTP is invalid")
+
+                var currentDate = new Date()
+                var otpCreated = checkOtpIsValid[0].created_at
+                var diff = new Date(currentDate.getTime() - otpCreated.getTime())
+                if (diff.getMinutes() > 1) {
+                    throw new Error("OTP is expired")
+                } else {
+                    await Auth.verifyOtp(email)
+
+                    var payload = {
+                        uid: checkOtpIsValid[0].uid,
+                        authorized: true
+                    }
+
+                    var token = jwt.sign(payload, process.env.SECRET_KEY)
+                    var refreshToken = jwt.sign(payload, process.env.SECRET_KEY)
+
+                    misc.response(res, 200, false, "", {
+                        token: token,
+                        refresh_token: refreshToken,
+                        user: {
+                            id: checkOtpIsValid[0].user_id,
+                            name: checkOtpIsValid[0].fullname,
+                            email: email,
+                            phone: checkOtpIsValid[0].phone,
+                            role: checkOtpIsValid[0].role,
+                            enabled: true,
+                        }
+                    })
+                }
+
+            } else {
+                throw new Error("User not found")
+            }
+        } catch (e) {
+            console.log(e)
+            misc.response(res, 400, true, e.message)
+        }
+    },
+
+    resendOtp: async (req, res) => {
+        const { email } = req.body
+
+        var otp = generateOTP()
+
+        try {
+            if (typeof email == "undefined" || email == "")
+                throw new Error("Field email is required")
+
+            if (!utils.validateEmail(email))
+                throw new Error("Invalid format E-mail Address. Etc : johndoe@gmail.com")
+
+            var isEmailAlreadyActive = await Auth.isEmailAlreadyActive(email)
+
+            if (isEmailAlreadyActive.length != 0)
+                throw new Error("E-mail Address is already active")
+
+            var checkEmail = await Auth.checkEmail(email)
+            if (checkEmail.length == 0)
+                throw new Error(`User not found`)
+
+            await Auth.resendOtp(email, otp)
+
+            await utils.sendEmail(email, otp)
+
+            misc.response(res, 200, false, `Berhasil mengirim ulang OTP, mohon periksa Alamat E-mail ${email}`)
         } catch (e) {
             console.log(e)
             misc.response(res, 400, true, e.message)

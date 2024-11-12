@@ -6,5 +6,7 @@ Route
     .post("/login", auth.login)
     .post("/register-member", auth.registerMember)
     .post("/register-kbri", auth.registerKbri)
+    .post("/verify-otp", auth.verifyOtp)
+    .post("/resend-otp", auth.resendOtp)
 
 module.exports = Route

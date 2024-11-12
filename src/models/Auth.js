@@ -20,14 +20,107 @@ module.exports = {
         })
     },
 
-    registerMember: (userId, email, password) => {
+    registerMember: (userId, otp, email, password) => {
         return new Promise((resolve, reject) => {
-            var query = `INSERT INTO users (uid, email, password) VALUES (?, ?, ?)`
-            conn.query(query, [userId, email, password], (e, result) => {
+            var query = `INSERT INTO users (uid, otp, email, password) VALUES (?, ?, ?, ?)`
+            conn.query(query, [userId, otp, email, password], (e, result) => {
                 if (e) {
                     reject(new Error(e))
                 } else {
                     resolve(result)
+                }
+            })
+        })
+    },
+    
+    isEmailAlreadyActive: (email) => {
+        return new Promise((resolve, reject) => {
+            const query = `SELECT email FROM users WHERE email = ? AND enabled = 1`
+            conn.query(query, [email], (e, res) => {
+                if (e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(res)
+                }
+            })
+        })
+    },
+
+    checkEmail: (email) => {
+        return new Promise((resolve, reject) => {
+            const query = `SELECT email, password FROM users WHERE email = ?`
+            conn.query(query, [email], (e, res) => {
+                if (e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(res)
+                }
+            })
+        })
+    },
+
+    checkOtp: (email, otp) => {
+        return new Promise((resolve, reject) => {
+            const query = `SELECT u.uid, u.otp, u.email, u.phone, r.name AS role, p.fullname, u.created_at
+                FROM users u
+                INNER JOIN profiles p ON u.uid = p.user_id
+                INNER JOIN user_roles ur ON ur.user_id = p.user_id
+                INNER JOIN roles r ON r.id = ur.role_id
+                WHERE u.email = '${email}' 
+                AND u.otp = '${otp}' 
+                AND u.enabled = 0`
+            conn.query(query, (e, res) => {
+                if (e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(res)
+                }
+            })
+        })
+    },
+
+    verifyOtp: (email) => {
+        return new Promise((resolve, reject) => {
+            const query = `UPDATE users
+            SET enabled = 1, 
+            updated_at = NOW()
+            WHERE email = ?`
+            conn.query(query, [email], (e, res) => {
+                if (e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(res)
+                }
+            })
+        })
+    },
+    
+    resendOtp: (email, otp) => {
+        return new Promise((resolve, reject) => {
+            const query = `UPDATE users
+            SET otp = ?, created_at = NOW()
+            WHERE email = ?`
+            conn.query(query, [otp, email], (e, res) => {
+                if (e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(res)
+                }
+            })
+        })
+    },
+
+    
+    updateOtp: (otp, email) => {
+        return new Promise((resolve, reject) => {
+            const query = `UPDATE users 
+            SET otp = ?, created_at = NOW(), updated_at = NOW()
+            WHERE email = ?`
+            conn.query(query, [otp, email], (e, res) => {
+                if (e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(res)
                 }
             })
         })
