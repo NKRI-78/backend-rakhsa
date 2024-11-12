@@ -36,7 +36,7 @@ module.exports = {
     
                 messageData.push({
                     id: message.msg_id,
-                    chat_id: chat_id,
+                    chat_id: req.body.chat_id,
                     user: {
                         id: message.sender_id,
                         avatar: message.avatar ?? "-",
