@@ -57,6 +57,20 @@ module.exports = {
     registerMember: async (req, res) => {
         try {
 
+            if(typeof req.body.fullname == "undefined" || req.body.fullname == "")
+                throw new Error("Field fullname is required")
+
+            if(typeof req.body.email == "undefined" || req.body.email == "")
+                throw new Error("Field email is required")
+
+            if(typeof req.body.passport == "undefined" || req.body.passport == "")
+                throw new Error("Field passport is required")
+
+            // if(typeof req.body.)
+
+            if(typeof req.body.password == "undefined" || req.body.password == "")
+                throw new Error("Field password is required")
+
             misc.response(res, 200, false, "")
 
         } catch (e) {
