@@ -4,7 +4,7 @@ module.exports = {
 
     login: (val) => {
         return new Promise((resolve, reject) => {
-            var query = `SELECT u.uid, u.email, u.phone, u.password, p.fullname, r.name AS role
+            var query = `SELECT u.uid, u.email, u.phone, u.password, u.enabled, p.fullname, r.name AS role
             FROM users u 
             INNER JOIN profiles p ON p.user_id = u.uid
             INNER JOIN user_roles ur ON ur.user_id = p.user_id
@@ -20,10 +20,10 @@ module.exports = {
         })
     },
 
-    register: () => {
+    registerMember: (userId, email, password) => {
         return new Promise((resolve, reject) => {
-            var query = ``
-            conn.query(query, (e, result) => {
+            var query = `INSERT INTO users (uid, email, password) VALUES (?, ?, ?)`
+            conn.query(query, [userId, email, password], (e, result) => {
                 if (e) {
                     reject(new Error(e))
                 } else {

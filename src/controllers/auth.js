@@ -1,9 +1,13 @@
+const { v4: uuidv4 } = require('uuid')
+
 const Auth = require("../models/Auth")
-const misc = require("../helpers/response")
+const User = require("../models/User")
 
 const jwt = require('jsonwebtoken')
 
+const misc = require("../helpers/response")
 const utils = require("../helpers/utils")
+const Role = require('../models/Role')
 
 module.exports = {
 
@@ -45,6 +49,9 @@ module.exports = {
                     email: login[0].email,
                     phone: login[0].phone,
                     role: login[0].role,
+                    enabled: login[0].enabled == 1 
+                    ? true 
+                    : false
                 }
             })
 
@@ -57,6 +64,8 @@ module.exports = {
     registerMember: async (req, res) => {
         try {
 
+            var userId = uuidv4()
+
             if(typeof req.body.fullname == "undefined" || req.body.fullname == "")
                 throw new Error("Field fullname is required")
 
@@ -66,12 +75,52 @@ module.exports = {
             if(typeof req.body.passport == "undefined" || req.body.passport == "")
                 throw new Error("Field passport is required")
 
-            // if(typeof req.body.)
+            if(typeof req.body.emergency_contact == "undefined" || req.body.emergency_contact == "")
+                throw new Error("Field emergency_contact is required")
 
             if(typeof req.body.password == "undefined" || req.body.password == "")
                 throw new Error("Field password is required")
 
-            misc.response(res, 200, false, "")
+            await Auth.registerMember(
+                userId,
+                req.body.email,
+                req.body.password
+            )
+
+            await User.registerMember(
+                userId,
+                req.body.fullname,
+                req.body.passport,
+                req.body.emergency_contact
+            )
+
+            var roles = await Role.findById(3)
+
+            if(roles.length == 0)
+                throw new Error("Role not found")
+
+            var role = roles[0]
+
+            var payload = {
+                uid: userId,
+                authorized: true
+            }
+
+            var token = jwt.sign(payload, process.env.SECRET_KEY)
+            var refreshToken = jwt.sign(payload, process.env.SECRET_KEY)
+
+            misc.response(res, 200, false, "", {
+                token: token,
+                refresh_token: refreshToken,
+                user: {
+                    id: userId,
+                    name: req.body.fullname,
+                    email: req.body.email,
+                    phone: req.body.phone,
+                    role: role.name,
+                    enabled: false,
+                }
+            })
 
         } catch (e) {
             console.log(e)
