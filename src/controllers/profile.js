@@ -1,8 +1,36 @@
 const Profile = require("../models/Profile")
 
 const misc = require("../helpers/response")
+const User = require("../models/User")
 
 module.exports = {
+
+    getProfile: async (req, res) => {
+        try {
+
+            if(req.body.user_id == "undefined")
+                throw new Error("Field user_id is required")
+        
+            var users = await User.getUser(req.body.user_id)
+
+            if(users.length == 0)
+                throw new Error("User not found")
+
+            var user = users[0]
+
+            var profile = {
+                id: user.user_id,
+                fullname: user.fullname,
+                avatar: user.avatar,
+                address: user.address
+            }
+
+            misc.response(res, 200, false, "", profile)
+        } catch(e) {
+            console.log(e)
+            misc.response(res, 400, true, e.message)
+        }
+    },
 
     updateAddress: async (req, res) => {
         try {
