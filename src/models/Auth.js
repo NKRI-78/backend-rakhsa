@@ -8,8 +8,11 @@ module.exports = {
             FROM users u 
             INNER JOIN profiles p ON p.user_id = u.uid
             INNER JOIN user_roles ur ON ur.user_id = p.user_id
-            INNER JOIN roles r ON r.id = ur.id
+            INNER JOIN roles r ON r.id = ur.role_id 
             WHERE email = ? OR username = ?`
+            
+            console.log(query)
+
             conn.query(query, [val, val], (e, result) => {
                 if (e) {
                     reject(new Error(e))
