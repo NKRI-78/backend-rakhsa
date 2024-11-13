@@ -2,6 +2,7 @@ const Profile = require("../models/Profile")
 
 const misc = require("../helpers/response")
 const User = require("../models/User")
+const { fdate } = require("../helpers/utils")
 
 module.exports = {
 
@@ -18,14 +19,15 @@ module.exports = {
 
             var user = users[0]
 
-            var profile = {
+            misc.response(res, 200, false, "", {
                 id: user.user_id,
-                fullname: user.fullname,
+                username: user.username,
                 avatar: user.avatar,
-                address: user.address
-            }
-
-            misc.response(res, 200, false, "", profile)
+                address: user.address ?? "-",
+                passport: user.passport ?? "-",
+                emergency_contact: user.emergency_contact ?? "-",
+                created_at: fdate(user.created_at)
+            })
         } catch(e) {
             console.log(e)
             misc.response(res, 400, true, e.message)
