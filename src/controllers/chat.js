@@ -74,6 +74,66 @@ module.exports = {
             misc.response(res, 400, true, e.message, null)
     
         }
+    },
+
+
+    list: async (req, res) => {
+        try {
+    
+            if(typeof req.body.user_id == "undefined" || req.body.user_id == "")
+                throw new Error("Field sender_id is required")
+    
+            var chats = await Chat.getChats(req.body.user_id)
+    
+            var data = []
+    
+            for (const i in chats) {
+                var chat = chats[i]
+    
+                var messages = await Chat.getLastMessage(chat.chat_id)
+    
+                var unreads = await Chat.getMessageUnread(chat.chat_id)
+    
+                var messageData = []
+    
+                for (const i in messages) {
+                    var message = messages[i]
+    
+                    var isMe = message.sender_id == req.body.user_id ? true : false
+    
+                    messageData.push({
+                        id: message.uid,
+                        content: message.content,
+                        is_read: message.ack == "READ" 
+                        ? true
+                        : false,
+                        is_typing: false,
+                        is_me: isMe,
+                        type: message.type,
+                        time: moment(message.created_at).format('HH:mm')
+                    })
+                }
+    
+                data.push({
+                    chat: {
+                        id: chat.chat_id
+                    },
+                    user: {
+                        id: chat.user_id,
+                        avatar: chat.avatar ?? "-",
+                        name: chat.fullname,
+                    },
+                    count_unread: unreads.length,
+                    messages: messageData
+                })
+            }
+    
+            misc.response(res, 200, false, "", data)
+    
+        } catch(e) {
+            console.log(e)
+            misc.response(res, 400, true, e.message, null)
+        }
     }
 
 }
