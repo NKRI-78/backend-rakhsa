@@ -99,7 +99,7 @@ module.exports = {
 
             var passwordHash = await utils.encryptPassword(req.body.password)
 
-            var users = Auth.checkEmail(req.body.email)
+            var users = await Auth.checkEmail(req.body.email)
 
             if(users.length != 0)
                 throw new Error("User already exist")
