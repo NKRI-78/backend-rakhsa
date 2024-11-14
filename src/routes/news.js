@@ -7,6 +7,8 @@ Route
     .get("/", news.list)
     .get("/:id", news.find)
     .delete("/:id", news.delete)
+    .put("/:id", news.update)
+    .put("/update-image/:id", news.updateImage)
     .post("/", news.insert)
 
 module.exports = Route

@@ -91,6 +91,44 @@ module.exports = {
         }
     },
 
+    update: async (req, res) => {
+        try {   
+
+            if(typeof req.params.id == "undefined" || req.params.id == "")
+                throw new Error("Param id is required")
+
+            await News.update(
+                req.params.id,
+                req.body.title, 
+                req.body.description
+            )
+
+            misc.response(res, 200, false, "")
+        } catch(e) {
+            console.log(e)
+            misc.response(res, 400, true, e.message)
+        }
+    },
+
+    
+    updateImage: async (req, res) => {
+        try {   
+
+            if(typeof req.params.id == "undefined" || req.params.id == "")
+                throw new Error("Param id is required")
+
+            await News.updateImage(
+                req.params.id,
+                req.body.img
+            )
+
+            misc.response(res, 200, false, "")
+        } catch(e) {
+            console.log(e)
+            misc.response(res, 400, true, e.message)
+        }
+    },
+
     insert: async (req, res) => {
         try {
 

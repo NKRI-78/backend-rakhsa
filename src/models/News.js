@@ -56,4 +56,30 @@ module.exports = {
         })
     },
 
+    update: (id, title, desc) => {
+        return new Promise((resolve, reject) => {
+            var query = `UPDATE news SET title = ?, description = ? WHERE id = ?`
+            conn.query(query, [title, desc, id], (e, result) => {
+                if (e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+    },
+
+    updateImage: (id, img) => {
+        return new Promise((resolve, reject) => {
+            var query = `UPDATE news SET img = ? WHERE id = ?`
+            conn.query(query, [img, id], (e, result) => {
+                if (e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+    }
+
 }
