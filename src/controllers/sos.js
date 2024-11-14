@@ -92,6 +92,7 @@ module.exports = {
             misc.response(res, 200, false, "", {
                 id: sosItem.uid,
                 media: sosItem.media,
+                type: sosItem.type,
                 location: sosItem.location,
                 country: sosItem.country,
                 lat: sosItem.lat,
