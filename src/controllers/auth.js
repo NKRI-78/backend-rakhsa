@@ -195,12 +195,14 @@ module.exports = {
             )
 
             await Auth.registerAmulet(
+                userId,
                 email, 
                 no_hp, 
                 password
             )
 
             await User.registerAmulet(
+                userId,
                 fullname,
                 address 
             )

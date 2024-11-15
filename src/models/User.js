@@ -19,10 +19,10 @@ module.exports = {
         })
     },
 
-    registerAmulet: (fullname, address) => {
+    registerAmulet: (userId, fullname, address) => {
         return new Promise((resolve, reject) => {
-            var query = `INSERT INTO profiles (fullname, address) VALUES (?, ?)`
-            conn.query(query, [fullname, address], (e, result) => {
+            var query = `INSERT INTO profiles (user_id, fullname, address) VALUES (?, ?, ?)`
+            conn.query(query, [userId, fullname, address], (e, result) => {
                 if (e) {
                     reject(new Error(e))
                 } else {
