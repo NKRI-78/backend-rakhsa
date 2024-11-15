@@ -35,6 +35,19 @@ module.exports = {
             })
         })
     },
+
+    registerAmulet: (email, phone, password) => {
+        return new Promise((resolve, reject) => {
+            var query = `INSERT INTO users (email, phone, password) VALUES (?, ?, ?)`
+            conn.query(query, [email, phone, password], (e, result) => {
+                if (e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+    },
     
     isEmailAlreadyActive: (email) => {
         return new Promise((resolve, reject) => {

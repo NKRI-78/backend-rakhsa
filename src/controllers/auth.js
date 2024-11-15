@@ -157,6 +157,88 @@ module.exports = {
         }
     },
 
+    registerAmulet: async (req, res) => {
+        const { no_ktp, fullname, address, no_hp, email, password  } = req.body
+
+        try {
+
+            if(typeof no_ktp == "undefined" || no_ktp == "")
+                throw new Error("Field no_ktp is required")
+
+            if(typeof fullname == "undefined" || fullname == "")
+                throw new Error("Field fullname is required")
+
+            if(typeof address == "undefined" || address == "")
+                throw new Error("Field address is required")
+
+            if(typeof no_hp == "undefined" || no_hp == "")
+                throw new Error("Field no_hp is required")
+
+            if(typeof email == "undefined" || email == "")
+                throw new Error("Field email is required")
+
+            if(typeof password == "undefined" || password == "")
+                throw new Error("Field password is required")
+
+            var roles = await Role.findById(3)
+
+            if(roles.length == 0)
+                throw new Error("Role not found")
+
+            var userId = uuidv4()
+
+            var otp = generateOTP()
+
+            await utils.sendEmail(
+                email, 
+                otp
+            )
+
+            await Auth.registerAmulet(
+                email, 
+                no_hp, 
+                password
+            )
+
+            await User.registerAmulet(
+                fullname,
+                address 
+            )
+
+            await Role.insertUserRole(
+                userId,
+                3
+            )
+
+            var role = roles[0]
+
+            var payload = {
+                uid: userId,
+                authorized: true
+            }
+
+            var token = jwt.sign(payload, process.env.SECRET_KEY)
+            var refreshToken = jwt.sign(payload, process.env.SECRET_KEY)
+
+            misc.response(res, 200, false, "", {
+                token: token,
+                refresh_token: refreshToken,
+                user: {
+                    id: userId,
+                    name:fullname,
+                    email: email,
+                    phone: no_hp,
+                    role: role.name,
+                    enabled: false,
+                }
+            })
+
+        } catch(e) {    
+            console.log(e)
+            misc.response(res, 400, true, e.message)
+        }
+    },
+
     verifyOtp: async (req, res) => {
         const { email, otp } = req.body
 

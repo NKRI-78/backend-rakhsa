@@ -19,6 +19,19 @@ module.exports = {
         })
     },
 
+    registerAmulet: (fullname, address) => {
+        return new Promise((resolve, reject) => {
+            var query = `INSERT INTO profiles (fullname, address) VALUES (?, ?)`
+            conn.query(query, [fullname, address], (e, result) => {
+                if (e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+    },
+
     registerMember: (user_id, fullname, passport, emergency_contact) => {
         return new Promise((resolve, reject) => {
             var query = `INSERT INTO profiles (user_id, fullname, passport, emergency_contact) VALUES (?, ?, ?, ?)`
