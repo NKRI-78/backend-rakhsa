@@ -11,7 +11,7 @@ module.exports = {
 
         try {
 
-            if(typeof is_confirm == "undefined" || is_confirm == ":is_confirm") 
+            if(typeof is_confirm == "undefined" || is_confirm == "") 
                 throw new Error("Param is_confirm is required")
 
             var sos = await Sos.list(is_confirm)
