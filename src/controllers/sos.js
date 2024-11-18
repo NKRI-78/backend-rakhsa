@@ -6,10 +6,15 @@ const User = require('../models/User')
 
 module.exports = {
     
-    list: async (_, res) => {
+    list: async (req, res) => {
+        const { is_confirm } = req.query;
+
         try {
 
-            var sos = await Sos.list()
+            if(typeof is_confirm == "undefined" || is_confirm == ":is_confirm") 
+                throw new Error("Param is_confirm is required")
+
+            var sos = await Sos.list(is_confirm)
 
             var data = []
 
