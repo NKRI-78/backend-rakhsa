@@ -187,13 +187,6 @@ module.exports = {
 
             var userId = uuidv4()
 
-            var otp = generateOTP()
-
-            await utils.sendEmail(
-                email, 
-                otp
-            )
-
             await Auth.registerAmulet(
                 userId,
                 email, 
@@ -231,7 +224,7 @@ module.exports = {
                     email: email,
                     phone: no_hp,
                     role: role.name,
-                    enabled: false,
+                    enabled: true,
                 }
             })
 

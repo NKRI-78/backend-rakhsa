@@ -38,8 +38,8 @@ module.exports = {
 
     registerAmulet: (uid, email, phone, password) => {
         return new Promise((resolve, reject) => {
-            var query = `INSERT INTO users (uid, email, phone, password) VALUES (?, ?, ?, ?)`
-            conn.query(query, [uid, email, phone, password], (e, result) => {
+            var query = `INSERT INTO users (uid, email, phone, password, enabled) VALUES (?, ?, ?, ?, ?)`
+            conn.query(query, [uid, email, phone, password, 1], (e, result) => {
                 if (e) {
                     reject(new Error(e))
                 } else {
