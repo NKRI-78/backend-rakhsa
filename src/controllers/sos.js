@@ -3,6 +3,7 @@ const misc = require('../helpers/response')
 const Kbri = require('../models/Kbri')
 const Sos = require('../models/Sos')
 const User = require('../models/User')
+const Chat = require('../models/Chat')
 
 module.exports = {
     
@@ -16,12 +17,12 @@ module.exports = {
 
             var sos = await Sos.list(is_confirm)
 
-            console.log(sos)
-
             var data = []
 
             for (const i in sos) {
                 var sosItem = sos[i]
+
+                var chats = await Chat.checkConversation(sosItem.user_id, sosItem.user_agent_id)
 
                 var sender = await User.getUser(sosItem.user_id)
                 var agent = await User.getUser(sosItem.user_agent_id)
@@ -42,6 +43,9 @@ module.exports = {
                     type: sosItem.type,
                     location: sosItem.location,
                     country: sosItem.country,
+                    chat_id: chats.length == 0 
+                    ? '-' 
+                    : chats[0].uid,
                     lat: sosItem.lat,
                     lng: sosItem.lng,
                     time: sosItem.time,
