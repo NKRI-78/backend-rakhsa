@@ -29,7 +29,7 @@ module.exports = {
 
                 var kbri = await Kbri.userKbri(sosItem.user_agent_id)
 
-                var senderId =  sender.length == 0 ? "-" : sender[0].id
+                var senderId =  sender.length == 0 ? "-" : sender[0].user_id
                 var senderName = sender.length == 0 ? "-" : sender[0].username
 
                 var agentId = agent.length == 0 ? "-" : agent[0].user_id
