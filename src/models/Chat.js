@@ -64,7 +64,7 @@ module.exports = {
         })
     },
 
-    getMessages: (chatId, sender) => {
+    getMessages: (chatId, sender, isAgent) => {
         return new Promise ((resolve, reject) => {
             // const query = `SELECT 
             // m.uid,
@@ -84,7 +84,7 @@ module.exports = {
             // AND (sdm.message_id IS NULL OR sdm.user_id != '${sender}')
             // ORDER BY m.sent_time DESC`
 
-            const query = `SELECT 
+            var query = `SELECT 
             p.fullname AS sender_name,
             p.avatar,
           	m.content, 
@@ -95,12 +95,34 @@ module.exports = {
             INNER JOIN chats c ON c.uid = m.chat_id
             INNER JOIN message_acks ma ON ma.id = m.ack
             INNER JOIN message_types mt ON mt.id = m.type
-            WHERE c.uid = '${chatId}' 
-            AND (m.sender_id = '${sender}' 
-            OR m.receiver_id = '${sender}')
+            WHERE c.uid = ? 
+            AND (m.sender_id = ? 
+            OR m.receiver_id = ?)
             ORDER BY m.created_at DESC`
 
-            conn.query(query, (e, result) => {
+            if(isAgent == false) {
+                query = `SELECT 
+                p.fullname AS sender_name,
+                p.avatar,
+                m.content, 
+                m.created_at,
+                mt.name type, m.uid AS msg_id, ma.name AS ack, c.uid AS chat_id, m.sender_id, m.receiver_id, m.created_at
+                FROM messages m 
+                INNER JOIN profiles p ON m.sender_id = p.user_id 
+                INNER JOIN chats c ON c.uid = m.chat_id
+                INNER JOIN message_acks ma ON ma.id = m.ack
+                INNER JOIN message_types mt ON mt.id = m.type
+                WHERE c.uid = ? 
+                AND (m.sender_id = ? 
+                OR m.receiver_id = ?)
+                AND m.is_expired = 0
+                ORDER BY m.created_at DESC`
+            }
+
+            conn.query(query, [
+                chatId, sender, 
+                sender
+            ], (e, result) => {
                 if(e) {
                     reject(new Error(e))
                 } else {

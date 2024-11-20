@@ -7,15 +7,20 @@ const misc = require("../helpers/response")
 module.exports = {
 
     messages: async (req, res) => {
+
+        const { sender_id, chat_id, is_agent } = req.body
     
         try {
+
+            if(typeof sender_id == "undefined" || sender_id == "")
+                throw new Error("Field sender_id is required")
     
-            if(typeof req.body.chat_id == "undefined" || req.body.chat_id == "")
+            if(typeof chat_id == "undefined" || chat_id == "")
                 throw new Error("Field chat_id is required")
         
             var recipients = await Chat.getChat(
-                req.body.chat_id,
-                req.body.sender_id
+                chat_id,
+                sender_id,
             )
     
             if(recipients.length == 0)
@@ -24,8 +29,9 @@ module.exports = {
             var recipient = recipients[0]
     
             var messages = await Chat.getMessages(
-                req.body.chat_id, 
-                req.body.sender_id
+                chat_id, 
+                sender_id,
+                is_agent
             )
     
             var messageData = []
@@ -35,12 +41,12 @@ module.exports = {
     
                 messageData.push({
                     id: message.msg_id,
-                    chat_id: req.body.chat_id,
+                    chat_id: chat_id,
                     user: {
                         id: message.sender_id,
                         avatar: message.avatar ?? "-",
                         name: message.sender_name,
-                        is_me: req.body.sender_id == message.sender_id 
+                        is_me: sender_id == message.sender_id 
                         ? true 
                         : false  
                     },
