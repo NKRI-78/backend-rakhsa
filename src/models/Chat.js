@@ -43,7 +43,7 @@ module.exports = {
 
     getChats: (senderId) => {
         return new Promise ((resolve, reject) => {
-            const query = `SELECT c.uid AS chat_id, p.user_id, p.fullname, p.avatar
+            var query = `SELECT c.uid AS chat_id, p.user_id, p.fullname, p.avatar
             FROM chats c, users u
             INNER JOIN profiles p ON p.user_id = u.uid
             WHERE  
@@ -132,9 +132,9 @@ module.exports = {
         })
     },
 
-    getLastMessage: (chatId) => {
+    getLastMessage: (chatId, isAgent) => {
         return new Promise ((resolve, reject) => {
-            const query = `SELECT m.uid, m.content, 
+            var query = `SELECT m.uid, m.content, 
             mt.name type, m.created_at, ma.name AS ack, m.sender_id
             FROM messages m 
             INNER JOIN message_acks ma ON ma.id = m.ack
@@ -143,6 +143,19 @@ module.exports = {
             WHERE c.uid = ? 
             ORDER BY m.created_at DESC 
             LIMIT 1`
+
+            if(isAgent == false) {
+                query = `SELECT m.uid, m.content, 
+                mt.name type, m.created_at, ma.name AS ack, m.sender_id
+                FROM messages m 
+                INNER JOIN message_acks ma ON ma.id = m.ack
+                INNER JOIN chats c ON c.uid = m.chat_id
+                INNER JOIN message_types mt ON mt.id = m.type
+                WHERE c.uid = ? 
+                AND m.is_expired = 0
+                ORDER BY m.created_at DESC 
+                LIMIT 1`
+            }
 
             conn.query(query, [chatId], (e, result) => {
                 if(e) {

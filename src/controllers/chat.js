@@ -84,19 +84,22 @@ module.exports = {
 
 
     list: async (req, res) => {
+
+        const { user_id, is_agent } = req.body
+
         try {
     
-            if(typeof req.body.user_id == "undefined" || req.body.user_id == "")
-                throw new Error("Field sender_id is required")
+            if(typeof user_id == "undefined" || user_id == "")
+                throw new Error("Field user_id is required")
     
-            var chats = await Chat.getChats(req.body.user_id)
+            var chats = await Chat.getChats(user_id)
     
             var data = []
     
             for (const i in chats) {
                 var chat = chats[i]
     
-                var messages = await Chat.getLastMessage(chat.chat_id)
+                var messages = await Chat.getLastMessage(chat.chat_id, is_agent)
     
                 var unreads = await Chat.getMessageUnread(chat.chat_id)
     
@@ -105,7 +108,7 @@ module.exports = {
                 for (const i in messages) {
                     var message = messages[i]
     
-                    var isMe = message.sender_id == req.body.user_id ? true : false
+                    var isMe = message.sender_id == user_id ? true : false
     
                     messageData.push({
                         id: message.uid,
