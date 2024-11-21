@@ -8,9 +8,15 @@ const { fdate } = require("../helpers/utils")
 module.exports = {
 
     list: async (req, res) => {
+
+        const { type } = req.query
+
         try {
 
-            var news = await News.list()
+            if(typeof type == "undefined" || type == "")
+                throw new Error("Param Query type is required")
+
+            var news = await News.list(type)
 
             var data = []
 
@@ -21,6 +27,7 @@ module.exports = {
                 var title = newsItem.title 
                 var img = newsItem.img
                 var desc = newsItem.description 
+                var newsType = newsItem.news_type 
                 var createdAt = newsItem.created_at
 
                 data.push({
@@ -28,14 +35,15 @@ module.exports = {
                     title: title, 
                     img: img, 
                     desc: desc,
+                    type: newsType,
                     created_at: fdate(createdAt)
                 })
             }
 
             misc.response(res, 200, false, "", data)
         } catch(e) {
-            console.log()
-            misc.response(res, 400, true, "")
+            console.log(e)
+            misc.response(res, 400, true, e.message)
         }
     }, 
     
@@ -130,21 +138,28 @@ module.exports = {
     },
 
     insert: async (req, res) => {
+
+        const { title, img, description, type } = req.body
+
         try {
 
-            if(typeof req.body.title == "undefined" || req.body.title == "")
+            if(typeof title == "undefined" || title == "")
                 throw new Error("Field title is required")
 
-            if(typeof req.body.img == "undefined" || req.body.img == "")
+            if(typeof img == "undefined" || img == "")
                 throw new Error("Field img is required")
 
-            if(typeof req.body.description == "undefined" || req.body.description == "")
+            if(typeof description == "undefined" || description == "")
                 throw new Error("Field description is required")
 
+            if(typeof type == "undefined" || type == "")
+                throw new Error("Field type is required")
+
             await News.insert(
-                req.body.title, 
-                req.body.img, 
-                req.body.description
+                title, 
+                img, 
+                description,
+                type
             )
 
             misc.response(res, 200, false, "")

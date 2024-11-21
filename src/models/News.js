@@ -2,10 +2,13 @@ const conn = require('../configs/db')
 
 module.exports = {
 
-    list: () => {
+    list: (type) => {
         return new Promise((resolve, reject) => {
-            var query = `SELECT id, title, img, description, created_at, updated_at FROM news`
-            conn.query(query, (e, result) => {
+            var query = `SELECT n.id, n.title, n.img, n.description, nt.name AS news_type, n.created_at, n.updated_at 
+            FROM news n 
+            INNER JOIN news_types nt ON nt.id = n.type
+            WHERE n.type = ?`
+            conn.query(query, [type == "news" ? 2 : 1], (e, result) => {
                 if (e) {
                     reject(new Error(e))
                 } else {
@@ -43,10 +46,10 @@ module.exports = {
         })
     },
 
-    insert: (title, img, desc) => {
+    insert: (title, img, desc, type) => {
         return new Promise((resolve, reject) => {
-            var query = `INSERT INTO news (title, img, description) VALUES (?, ?, ?)`
-            conn.query(query, [title, img, desc], (e, result) => {
+            var query = `INSERT INTO news (title, img, description, type) VALUES (?, ?, ?, ?)`
+            conn.query(query, [title, img, desc, type == "news" ? 2 : 1], (e, result) => {
                 if (e) {
                     reject(new Error(e))
                 } else {
