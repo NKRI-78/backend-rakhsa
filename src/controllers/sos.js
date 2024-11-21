@@ -75,12 +75,14 @@ module.exports = {
     },
 
     detail: async (req, res) => {
+        const { id } = req.params
+
         try {
 
-            if(typeof req.params.id == "undefined" || req.params.id == "")
+            if(typeof id == "undefined" || id == "")
                 throw new Error("Field id is required")
 
-            var sos = await Sos.detail(req.params.id)
+            var sos = await Sos.detail(id)
 
             if(sos.length == 0) 
                 throw new Error("SOS not found")
@@ -131,5 +133,43 @@ module.exports = {
         }
 
     },
+
+    expireSos: async (req, res) => {
+        const { id } = req.body
+         
+        try {
+
+            if(typeof id == "undefined" || id == "")
+                throw new Error("Field id is required")
+
+            var checkSos = await Sos.checkSos(id)
+
+            if(checkSos.length == 0) 
+                throw new Error("Sos not found")
+
+            var senderId = checkSos[0].user_id 
+            var recipientId = checkSos[0].user_agent_id
+
+            var checkExpireSos = await Sos.checkExpireSos(id)
+
+            if(checkExpireSos.length == 1)
+                throw new Error("Sos already finish")
+
+            await Sos.expireSos(id)
+
+            var checkMessages = await Chat.checkMessages(senderId, recipientId)
+
+            if(checkMessages.length != 0) {
+                await Chat.updateExpireMessages(
+                    senderId, 
+                    recipientId
+                )
+            }
+
+            misc.response(res, 200, false, "", null)
+        } catch(e) {
+            misc.response(res, 400, true, e.message)
+        }
+    }
         
 }

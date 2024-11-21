@@ -64,6 +64,39 @@ module.exports = {
         })
     },
 
+    checkMessages: (sender, receiverId) => {
+        return new Promise ((resolve, reject) => {
+            var query = `SELECT FROM messages 
+            WHERE sender_id = ? 
+            OR receiver_id = ?
+            ORDER BY created_at DESC`
+
+            conn.query(query, [
+                sender, receiverId
+            ], (e, result) => {
+                if(e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+    },
+
+    updateExpireMessages: (senderId, receiverId) => {
+        return new Promise ((resolve, reject) => {
+            var query = `UPDATE messages SET is_expired = 1 WHERE sender_id = ? AND receiver_id = ?`
+
+            conn.query(query, [senderId, receiverId], (e, result) => {
+                if(e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+    },
+
     getMessages: (chatId, sender, isAgent) => {
         return new Promise ((resolve, reject) => {
             // const query = `SELECT 

@@ -36,4 +36,45 @@ module.exports = {
         })
     },
 
+    checkSos: (sosId) => {
+        return new Promise((resolve, reject) => {
+            var query = `SELECT user_id, user_agent_id FROM sos WHERE uid = ?`
+            conn.query(query, [sosId], (e, result) => {
+                if (e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+    },
+
+    checkExpireSos: (sosId) => {
+        return new Promise((resolve, reject) => {
+            var query = `SELECT uid FROM sos WHERE uid = ? 
+            AND is_finish = 1`
+            conn.query(query, [sosId], (e, result) => {
+                if (e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+    },
+
+    expireSos: (sosId) => {
+        return new Promise((resolve, reject) => {
+            var query = `UPDATE sos SET is_finish = 1
+            WHERE uid = ?`
+            conn.query(query, [sosId], (e, result) => {
+                if (e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+    },
+
 }
