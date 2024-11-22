@@ -7,6 +7,7 @@ const profile = require("./routes/profile")
 const sos = require("./routes/sos")
 const media = require("./routes/media")
 const news = require("./routes/news")
+const event = require("./routes/event")
 
 const Route = express.Router()
 
@@ -14,6 +15,7 @@ Route
     .use("/api/v1/auth", auth)
     .use("/api/v1/administration", administration)
     .use("/api/v1/chat", chat)
+    .use("/api/v1/event", event)
     .use("/api/v1/media", media)
     .use("/api/v1/news", news)
     .use("/api/v1/profile", profile)
