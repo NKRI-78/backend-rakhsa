@@ -64,7 +64,7 @@ module.exports = {
     },
 
     fdate: (date) => {
-        return moment(date).locale('id').format('dddd, d MMMM YYYY')
+        return moment(date).locale('id').format('dddd, d MMM YYYY')
     },
 
     formatYearAndMonth(date) {

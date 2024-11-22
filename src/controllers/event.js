@@ -6,7 +6,7 @@ const User = require("../models/User")
 
 module.exports = {
 
-    list: async (req, res) => {
+    list: async (_, res) => {
         try {
 
             var events = await Event.list()
@@ -24,8 +24,8 @@ module.exports = {
                     description: event.description,
                     state: event.state_name, 
                     continent: event.continent_name,
-                    start_date: utils.formatDate(event.start_date), 
-                    end_date: utils.formatDate(event.end_date), 
+                    start_date: utils.fdate(event.start_date), 
+                    end_date: utils.fdate(event.end_date), 
                     user: {
                         id: users[0].user_id,
                         name: users[0].username, 
