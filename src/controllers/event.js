@@ -24,8 +24,10 @@ module.exports = {
                     description: event.description,
                     state: event.state_name, 
                     continent: event.continent_name,
-                    start_date: utils.fdate(event.start_date), 
-                    end_date: utils.fdate(event.end_date), 
+                    start_day: utils.fday(event.start_date),
+                    end_day: utils.fday(event.end_date),
+                    start_date: utils.formatDateByName(event.start_date), 
+                    end_date: utils.formatDateByName(event.end_date), 
                     user: {
                         id: users[0].user_id,
                         name: users[0].username, 

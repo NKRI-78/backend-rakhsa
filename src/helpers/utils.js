@@ -63,7 +63,12 @@ module.exports = {
         return initials
     },
 
+    fday: (date) => {
+        return moment(date).locale('id').format('dddd')
+    },
+
     fdate: (date) => {
+        console.log(date)
         return moment(date).locale('id').format('dddd, d MMM YYYY')
     },
 
@@ -84,7 +89,7 @@ module.exports = {
     },
 
     formatDateByName: (date) => {
-        return moment(date).locale('id').format('DD MMMM YYYY')
+        return moment(date).locale('id').format('DD MMM YYYY')
     },
   
     convertRp: (val) => {
