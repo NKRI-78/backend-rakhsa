@@ -17,8 +17,9 @@ module.exports = {
 
     states: (continentId) => {
         return new Promise((resolve, reject) => {
-            var query = `SELECT name FROM states 
-            WHERE continent_id = ?`
+            var query = `SELECT s.id, s.name FROM states s 
+            INNER JOIN continents c ON c.id = s.continent_id 
+            WHERE s.continent_id = ?`
             conn.query(query, [continentId], (e, result) => {
                 if (e) {
                     reject(new Error(e))

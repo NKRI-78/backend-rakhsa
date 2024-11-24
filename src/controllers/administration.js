@@ -41,7 +41,6 @@ module.exports = {
 
                 data.push({
                     id: state.id,
-                    continent_id: state.continent_id,
                     name: state.name
                 })
             }
