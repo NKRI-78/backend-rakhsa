@@ -52,6 +52,27 @@ module.exports = {
         }
     },
 
+    countries: async (_, res) => {
+        try {   
+            var countries = await Administration.countries()
+
+            var data = []
+
+            for (const i in countries) {
+                var country = countries[i]
+
+                data.push({
+                    id: country.id, 
+                    name: country.name
+                })
+            }
+            misc.response(res, 200, false, "", data)
+        } catch(e) {
+            console.log(e)
+            misc.response(res, 400, true, e.message)
+        }
+    },
+
     cities: async (req, res) => {
         try {
 

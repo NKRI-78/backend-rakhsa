@@ -15,6 +15,19 @@ module.exports = {
         })
     },
 
+    countries: () => {
+        return new Promise((resolve, reject) => {
+            var query = `SELECT * FROM states`
+            conn.query(query, (e, result) => {
+                if (e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+    },
+
     states: (continentId) => {
         return new Promise((resolve, reject) => {
             var query = `SELECT s.id, s.name FROM states s 
