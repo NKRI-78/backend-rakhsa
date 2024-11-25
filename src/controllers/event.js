@@ -42,6 +42,88 @@ module.exports = {
         }
     },
 
+    listEventUser: async (req, res) => {
+        
+        const { user_id } = req.body
+
+        try {
+
+            if(typeof user_id == "undefined" || user_id == "")
+                throw new Error("Field user_id is required")
+
+            var events = await Event.list(user_id)
+
+            var data = []
+
+            for (const i in events) {
+                var event = events[i]
+
+                var users = await User.getUser(event.user_id)
+
+                data.push({
+                    id: event.id,
+                    title: event.title, 
+                    description: event.description,
+                    state: event.state_name, 
+                    continent: event.continent_name,
+                    start_day: utils.fday(event.start_date),
+                    end_day: utils.fday(event.end_date),
+                    start_date: utils.formatDateByName(event.start_date), 
+                    end_date: utils.formatDateByName(event.end_date), 
+                    user: {
+                        id: users[0].user_id,
+                        name: users[0].username, 
+                    }
+                })
+            }
+
+            misc.response(res, 200, false, "", data)             
+        } catch(e) {
+            console.log(e)
+            misc.response(res, 400, true, "", null)
+        }
+    },
+
+    detail: async (req, res) => {
+        const { id } = req.params
+
+        try {
+
+           if(id == ":id" || id == "") 
+                throw new Error("Param id is required")
+
+            var events = await Event.find(id)
+
+            if(events.length == 0)
+                throw new Error("Event not found")
+
+            var event = events[0]
+
+            var users = await User.getUser(event.user_id)
+
+            var data = {
+                id: event.id,
+                title: event.title, 
+                description: event.description,
+                state: event.state_name, 
+                continent: event.continent_name,
+                start_day: utils.fday(event.start_date),
+                end_day: utils.fday(event.end_date),
+                start_date: utils.formatDateByName(event.start_date), 
+                end_date: utils.formatDateByName(event.end_date), 
+                user: {
+                    id: users[0].user_id,
+                    name: users[0].username, 
+                }
+            }
+
+            misc.response(res, 200, false, "", data)
+        } catch(e) {
+            console.log(e)
+            misc.response(res, 400, true, "", null)
+        }
+    },
+
     store: async (req, res) => {
 
         const { 
