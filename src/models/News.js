@@ -46,10 +46,10 @@ module.exports = {
         })
     },
 
-    insert: (title, img, desc, type) => {
+    insert: (title, img, desc, lat, lng, type) => {
         return new Promise((resolve, reject) => {
-            var query = `INSERT INTO news (title, img, description, type) VALUES (?, ?, ?, ?)`
-            conn.query(query, [title, img, desc, type == "news" ? 2 : 1], (e, result) => {
+            var query = `INSERT INTO news (title, img, description, lat, lng, type) VALUES (?, ?, ?, ?, ?, ?)`
+            conn.query(query, [title, img, desc, lat, lng, type == "news" ? 2 : 1], (e, result) => {
                 if (e) {
                     reject(new Error(e))
                 } else {
@@ -59,10 +59,10 @@ module.exports = {
         })
     },
 
-    update: (id, title, desc) => {
+    update: (id, title, desc, lat, lng) => {
         return new Promise((resolve, reject) => {
-            var query = `UPDATE news SET title = ?, description = ? WHERE id = ?`
-            conn.query(query, [title, desc, id], (e, result) => {
+            var query = `UPDATE news SET title = ?, description = ?, lat = ?, lng = ? WHERE id = ?`
+            conn.query(query, [title, desc, lat, lng, id], (e, result) => {
                 if (e) {
                     reject(new Error(e))
                 } else {

@@ -108,7 +108,9 @@ module.exports = {
             await News.update(
                 req.params.id,
                 req.body.title, 
-                req.body.description
+                req.body.description,
+                req.body.lat, 
+                req.body.lng
             )
 
             misc.response(res, 200, false, "")
@@ -139,7 +141,7 @@ module.exports = {
 
     insert: async (req, res) => {
 
-        const { title, img, description, type } = req.body
+        const { title, img, description, lat, lng, type } = req.body
 
         try {
 
@@ -152,6 +154,12 @@ module.exports = {
             if(typeof description == "undefined" || description == "")
                 throw new Error("Field description is required")
 
+            if(typeof lat == "undefined" || lat == "")
+                throw new Error("Field lat is required")
+
+            if(typeof lng == "undefined" || lng == "")
+                throw new Error("Field lng is required")
+
             if(typeof type == "undefined" || type == "")
                 throw new Error("Field type is required")
 
@@ -159,6 +167,8 @@ module.exports = {
                 title, 
                 img, 
                 description,
+                lat,
+                lng,
                 type
             )
 
