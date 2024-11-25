@@ -46,8 +46,10 @@ module.exports = {
     find: (id) => {
         return new Promise((resolve, reject) => {
             var query = `SELECT i.id, i.title, i.description, i.continent_id, i.state_id, i.start_date, i.end_date,
+            stat.id AS state_id,
             stat.name AS state_name, 
             con.name AS continent_name, 
+            con.id AS continent_id,
             i.user_id
             FROM itineraries i
             INNER JOIN continents con ON con.id = i.continent_id 
