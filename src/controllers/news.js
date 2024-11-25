@@ -157,12 +157,6 @@ module.exports = {
             if(typeof lat == "undefined" || lat == "")
                 throw new Error("Field lat is required")
 
-            if(typeof lng == "undefined" || lng == "")
-                throw new Error("Field lng is required")
-
-            if(typeof type == "undefined" || type == "")
-                throw new Error("Field type is required")
-
             await News.insert(
                 title, 
                 img, 
