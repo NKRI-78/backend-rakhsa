@@ -15,9 +15,9 @@ module.exports = {
         })
     },
 
-    countries: () => {
+    countries: (search) => {
         return new Promise((resolve, reject) => {
-            var query = `SELECT * FROM states`
+            var query = `SELECT * FROM states WHERE name LIKE '%${search}%'`
             conn.query(query, (e, result) => {
                 if (e) {
                     reject(new Error(e))

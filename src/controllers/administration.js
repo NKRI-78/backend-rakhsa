@@ -52,9 +52,15 @@ module.exports = {
         }
     },
 
-    countries: async (_, res) => {
+    countries: async (req, res) => {
+        const { search  } = req.query
+        
         try {   
-            var countries = await Administration.countries()
+
+            if(typeof search == "undefined" || search == "") 
+                throw new Error("Query search is required")
+
+            var countries = await Administration.countries(search)
 
             var data = []
 
