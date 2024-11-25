@@ -18,4 +18,31 @@ module.exports = {
         })
     },
 
+    infoKbri: (id) => {
+        return new Promise((resolve, reject) => {
+            var query = `SELECT title, img, description, lat, lng, state_id 
+            FROM kbris WHERE id = ?`
+            conn.query(query, [title, img, description, lat, lng, stateId], (e, result) => {
+                if(e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(result)
+                }
+            })  
+        })
+    },
+
+    formKbri: (title, img, description, lat, lng, stateId) => {
+        return new Promise((resolve, reject) => {
+            var query = `INSERT INTO (title, img, description, lat, lng, state_id) VALUES (?, ?, ?, ?, ?, ?)`
+            conn.query(query, [title, img, description, lat, lng, stateId], (e, result) => {
+                if(e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(result)
+                }
+            })  
+        })
+    },
+
 }
