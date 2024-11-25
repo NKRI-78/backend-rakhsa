@@ -4,7 +4,7 @@ module.exports = {
 
     list: (type) => {
         return new Promise((resolve, reject) => {
-            var query = `SELECT n.id, n.title, n.img, n.description, nt.name AS news_type, n.created_at, n.updated_at 
+            var query = `SELECT n.id, n.title, n.img, n.description, n.lat, n.lng, nt.name AS news_type, n.created_at, n.updated_at 
             FROM news n 
             INNER JOIN news_types nt ON nt.id = n.type
             WHERE n.type = ?`
@@ -20,7 +20,7 @@ module.exports = {
 
     find: (id) => {
         return new Promise((resolve, reject) => {
-            var query = `SELECT id, title, img, description, created_at 
+            var query = `SELECT id, title, img, description, lat, lng, created_at 
             FROM news WHERE id = ?`
             conn.query(query, [id], (e, result) => {
                 if (e) {

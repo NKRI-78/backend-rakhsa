@@ -27,6 +27,8 @@ module.exports = {
                 var title = newsItem.title 
                 var img = newsItem.img
                 var desc = newsItem.description 
+                var lat = newsItem.lat 
+                var lng = newsItem.lng
                 var newsType = newsItem.news_type 
                 var createdAt = newsItem.created_at
 
@@ -35,6 +37,8 @@ module.exports = {
                     title: title, 
                     img: img, 
                     desc: desc,
+                    lat: lat,
+                    lng: lng,
                     type: newsType,
                     created_at: fdate(createdAt)
                 })
@@ -66,6 +70,8 @@ module.exports = {
                 id: newsItem.id,
                 title: newsItem.title,
                 img: newsItem.img,
+                lat: newsItem.lat,
+                lng: newsItem.lng,
                 desc: newsItem.description,
                 created_at: fdate(newsItem.created_at)
             }
