@@ -20,7 +20,7 @@ module.exports = {
 
     find: (id) => {
         return new Promise((resolve, reject) => {
-            var query = `SELECT id, title, img, description, COALESCE(n.lat, '-') AS lat, COALESCE(n.lng, '-') AS lng, created_at 
+            var query = `SELECT id, title, img, description, COALESCE(lat, '-') AS lat, COALESCE(lng, '-') AS lng, created_at 
             FROM news WHERE id = ?`
             conn.query(query, [id], (e, result) => {
                 if (e) {

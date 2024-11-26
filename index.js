@@ -26,15 +26,11 @@ var CronJob = require('cron').CronJob
 // 0 */10 * * * * Every 10 minutes
 // 00 00 00 * * * Midgnight
 
-const job = new CronJob('00 00 00 * * *', async () => {
+const job = new CronJob('0 */10 * * * *', async () => {
 
   var totalMember = await Admin.getMember()
 
-  async function batchQuerying(totalPages, batchSize, skip = 0) {
- 
-  }
 
-  batchQuerying(totalMember.length, 5)
 })
 
 const server = app.listen(port, () => {
