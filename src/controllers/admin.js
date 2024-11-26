@@ -1,6 +1,7 @@
 require("dotenv").config()
 
 const misc = require('../helpers/response')
+const Admin = require("../models/Admin")
 const Auth = require("../models/Auth")
 const User = require("../models/User")
 
@@ -33,6 +34,33 @@ module.exports = {
 
 
             misc.response(res, 200, false, "", data)
+        } catch(e) {
+            console.log(e)
+            misc.response(res, 400, true, e.message)
+        }
+    },
+
+    assignUserKbri: async (req, res) => {
+        const { user_id, continent_id, state_id, city_id } = req.body
+        
+        try {
+
+            if(typeof user_id == "undefined" || user_id == "")
+                throw new Error("Field user_id is required")
+
+            if(typeof continent_id == "undefined" || continent_id == "")
+                throw new Error("Field continent_id is required")
+
+            if(typeof state_id == "undefined" || state == "")
+                throw new Error("Field state_id is required")
+
+            if(typeof city_id == "undefined" || city == "")
+                throw new Error("Field city_id is required")
+
+            await Admin.assignUserKbri(user_id, continent_id, state_id, city_id)
+
+            misc.response(res, 200, false, "")
+
         } catch(e) {
             console.log(e)
             misc.response(res, 400, true, e.message)
