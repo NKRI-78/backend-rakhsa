@@ -18,6 +18,32 @@ module.exports = {
         })
     },
 
+    checkEws: () => {
+        return new Promise((resolve, reject) => {
+            var query = `SELECT id, TIMESTAMPDIFF(HOUR, created_at, NOW()) AS difference FROM news`
+            conn.query(query, (e, result) => {
+                if (e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+    },
+
+    deleteEws: (id) => {
+        return new Promise((resolve, reject) => {
+            var query = `DELETE FROM news WHERE id = ?`
+            conn.query(query, [id], (e, result) => {
+                if (e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+    },
+
     find: (id) => {
         return new Promise((resolve, reject) => {
             var query = `SELECT id, title, img, description, COALESCE(lat, '-') AS lat, COALESCE(lng, '-') AS lng, created_at 

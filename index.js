@@ -9,6 +9,10 @@ const config = require("./src/configs/configs")
 const port = config.port
 const cors = require("cors")
 const routerNav = require("./src/index")
+const Event = require("./src/models/Event")
+const News = require("./src/models/News")
+
+const db = require('./src/configs/db');
 
 app.use(fileUpload())
 app.use(logger("dev"))
@@ -26,12 +30,24 @@ var CronJob = require('cron').CronJob
 // 0 */10 * * * * Every 10 minutes
 // 00 00 00 * * * Midgnight
 
-const job = new CronJob('0 */10 * * * *', async () => {
+const job = new CronJob('00 00 00 * * *', async () => {
 
-  var totalMember = await Admin.getMember()
+  var ews = await News.checkEws()
 
+  for (const i in ews) {
+    var item = ews[i]
+
+    var id = item.id 
+    var difference = item.difference
+
+    if(difference > 24) {
+      await News.deleteEws(id)
+    }    
+  }
 
 })
+
+job.start()
 
 const server = app.listen(port, () => {
   console.log(`\n\t *** Server listening on PORT ${port}  ***`)
