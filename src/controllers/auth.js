@@ -192,7 +192,7 @@ module.exports = {
 
             var checkUser = await Auth.checkEmail(email)
 
-            if(checkUser.length =! 0)
+            if(checkUser.length != 0)
                 throw new Error("User already exist")
 
             await Auth.registerAmulet(
