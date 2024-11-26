@@ -188,11 +188,13 @@ module.exports = {
 
             var userId = uuidv4()
 
+            var passwordHash = await utils.encryptPassword(password)
+
             await Auth.registerAmulet(
                 userId,
                 email, 
                 no_hp, 
-                password
+                passwordHash
             )
 
             await User.registerAmulet(
