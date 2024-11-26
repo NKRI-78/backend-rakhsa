@@ -1,8 +1,8 @@
 const Chat = require("../models/Chat")
  
-const moment = require('moment')
-
 const misc = require("../helpers/response")
+
+const moment = require('moment')
 
 module.exports = {
 

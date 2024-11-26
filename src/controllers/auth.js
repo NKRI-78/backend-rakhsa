@@ -8,6 +8,7 @@ const jwt = require('jsonwebtoken')
 const misc = require("../helpers/response")
 const utils = require("../helpers/utils")
 const Role = require('../models/Role')
+
 const { generateOTP } = require('../configs/otp')
 
 module.exports = {

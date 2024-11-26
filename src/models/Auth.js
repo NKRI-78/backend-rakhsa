@@ -126,7 +126,6 @@ module.exports = {
             })
         })
     },
-
     
     updateOtp: (otp, email) => {
         return new Promise((resolve, reject) => {
@@ -142,5 +141,19 @@ module.exports = {
             })
         })
     },
+
+    createUser: (userId, email, username, phone, password) => {
+        return new Promise((resolve, reject) => {
+            var query = `INSERT INTO users (uid, email, username, phone, password) 
+            VALUES (?, ?, ?, ?, ?)`
+            conn.query(query, [userId, email, username, phone, password], (e, result) => {
+                if (e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+    }, 
 
 }

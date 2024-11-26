@@ -19,6 +19,40 @@ module.exports = {
         })
     },
 
+    listUser: () => {
+        return new Promise((resolve, reject) => {
+            var query = `SELECT u.uid AS user_id, p.fullname, COALESCE(p.avatar, '-') as avatar, COALESCE(p.address, '-') AS address, p.passport, 
+                COALESCE(p.nik, '-') AS nik, p.avatar,
+                COALESCE(p.emergency_contact, '-') AS emergency_contact, u.email, COALESCE(u.username, '-') AS username, 
+                COALESCE(u.phone, '-') AS phone 
+                FROM users u
+                INNER JOIN profiles p 
+                ON p.user_id = u.uid
+            `
+            conn.query(query, (e, result) => {
+                if (e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+    },
+
+    createUser: (userId, fullname, avatar, address, passport, nik, emergencyContact) => {
+        return new Promise((resolve, reject) => {
+            var query = `INSERT INTO profiles (user_id, fullname, avatar, address, passport, nik, emergency_contact) 
+            VALUES (?, ?, ?, ?, ?, ?, ?)`
+            conn.query(query, [userId, fullname, avatar, address, passport, nik, emergencyContact], (e, result) => {
+                if (e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+    },  
+
     registerAmulet: (userId, fullname, address) => {
         return new Promise((resolve, reject) => {
             var query = `INSERT INTO profiles (user_id, fullname, address) VALUES (?, ?, ?)`
