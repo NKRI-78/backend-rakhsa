@@ -190,6 +190,11 @@ module.exports = {
 
             var passwordHash = await utils.encryptPassword(password)
 
+            var checkUser = await Auth.checkEmail(email)
+
+            if(checkUser.length =! 0)
+                throw new Error("User already exist")
+
             await Auth.registerAmulet(
                 userId,
                 email, 

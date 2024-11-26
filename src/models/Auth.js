@@ -64,7 +64,6 @@ module.exports = {
 
     checkEmail: (email) => {
         return new Promise((resolve, reject) => {
-            console.log(email)
             const query = `SELECT email FROM users WHERE email = ?`
             conn.query(query, [email], (e, res) => {
                 if (e) {
