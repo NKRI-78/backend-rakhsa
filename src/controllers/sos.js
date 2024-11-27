@@ -52,6 +52,9 @@ module.exports = {
                     is_confirm: sosItem.is_confirm == 1 
                     ? true 
                     : false,
+                    is_finish: sosItem.is_finish == 1 
+                    ? true 
+                    : false,
                     sender: {
                         id: senderId,
                         name: senderName
@@ -112,6 +115,9 @@ module.exports = {
                 lng: sosItem.lng,
                 time: sosItem.time,
                 is_confirm: sosItem.is_confirm == 1 
+                ? true 
+                : false,
+                is_finish: sosItem.is_finish == 1 
                 ? true 
                 : false,
                 sender: {
