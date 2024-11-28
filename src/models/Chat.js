@@ -83,11 +83,25 @@ module.exports = {
         })
     },
 
-    updateExpireMessages: (senderId, receiverId) => {
+    updateExpireMessagesSender: (senderId, receiverId) => {
         return new Promise ((resolve, reject) => {
             var query = `UPDATE messages SET is_expired = 1 WHERE sender_id = ? AND receiver_id = ?`
 
             conn.query(query, [senderId, receiverId], (e, result) => {
+                if(e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+    },
+
+    updateExpireMessagesReceiver: (receiverId, senderId) => {
+        return new Promise ((resolve, reject) => {
+            var query = `UPDATE messages SET is_expired = 1 WHERE sender_id = ? AND receiver_id = ?`
+
+            conn.query(query, [receiverId, senderId], (e, result) => {
                 if(e) {
                     reject(new Error(e))
                 } else {

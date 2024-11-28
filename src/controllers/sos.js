@@ -163,14 +163,15 @@ module.exports = {
 
             await Sos.expireSos(id)
 
-            var checkMessages = await Chat.checkMessages(senderId, recipientId)
+            await Chat.updateExpireMessagesSender(
+                senderId, 
+                recipientId
+            )
 
-            if(checkMessages.length != 0) {
-                await Chat.updateExpireMessages(
-                    senderId, 
-                    recipientId
-                )
-            }
+            await Chat.updateExpireMessagesReceiver(
+                recipientId,
+                senderId
+            )
 
             misc.response(res, 200, false, "", null)
         } catch(e) {
