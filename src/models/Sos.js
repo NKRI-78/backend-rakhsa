@@ -8,7 +8,7 @@ module.exports = {
                 FROM sos s
                 INNER JOIN sos_types st ON st.id = s.sos_type
                 WHERE s.is_confirm = 1
-                AND platform_type = '${platformType == 'raksha' ? 1 : 2}'
+                AND s.platform_type = '${platformType == 'raksha' ? 1 : 2}'
             `
 
             if(type == "confirmed") {
@@ -16,7 +16,7 @@ module.exports = {
                     FROM sos s
                     INNER JOIN sos_types st ON st.id = s.sos_type
                     WHERE s.is_confirm = 1 AND s.is_finish = 1
-                    AND platform_type = '${platformType == 'raksha' ? 1 : 2}'
+                    AND s.platform_type = '${platformType == 'raksha' ? 1 : 2}'
                 `
             }
 
@@ -25,7 +25,7 @@ module.exports = {
                 FROM sos s
                 INNER JOIN sos_types st ON st.id = s.sos_type
                 WHERE s.is_confirm = 0
-                AND platform_type = '${platformType == 'raksha' ? 1 : 2}'`
+                AND s.platform_type = '${platformType == 'raksha' ? 1 : 2}'`
             }
 
             if(type == "process") {
@@ -33,7 +33,7 @@ module.exports = {
                 FROM sos s
                 INNER JOIN sos_types st ON st.id = s.sos_type
                 WHERE s.is_confirm = 1 AND s.is_finish = 0
-                AND platform_type = '${platformType == 'raksha' ? 1 : 2}'`
+                AND s.platform_type = '${platformType == 'raksha' ? 1 : 2}'`
             }
 
             conn.query(query, (e, result) => {
