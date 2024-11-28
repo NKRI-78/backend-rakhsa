@@ -8,14 +8,17 @@ const Chat = require('../models/Chat')
 module.exports = {
     
     list: async (req, res) => {
-        const { type } = req.query
+        const { type, platform_type } = req.query
 
         try {
 
             if(typeof type == "undefined" || type == "") 
                 throw new Error("Param type is required")
 
-            var sos = await Sos.list(type)
+            if(typeof platform_type == "undefined" || platform_type == "")
+                throw new Error("Param platform_type is required")
+
+            var sos = await Sos.list(type, platform_type)
 
             var data = []
 

@@ -14,6 +14,10 @@ module.exports = {
             if(typeof id == ":id" || id == "")
                 throw new Error("Param id is required")
 
+            var kbris = await Kbri.infoKbri(id)
+
+            console.log(kbris)
+
             misc.response(res, 200, false, "")
         } catch(e) {
             console.log(e)
