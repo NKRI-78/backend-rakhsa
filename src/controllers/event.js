@@ -51,7 +51,7 @@ module.exports = {
             if(typeof user_id == "undefined" || user_id == "")
                 throw new Error("Field user_id is required")
 
-            var events = await Event.list(user_id)
+            var events = await Event.listEventUser(user_id)
 
             var data = []
 
