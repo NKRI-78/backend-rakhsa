@@ -8,14 +8,14 @@ const Chat = require('../models/Chat')
 module.exports = {
     
     list: async (req, res) => {
-        const { is_confirm } = req.query
+        const { type } = req.query
 
         try {
 
-            if(typeof is_confirm == "undefined" || is_confirm == "") 
-                throw new Error("Param is_confirm is required")
+            if(typeof type == "undefined" || type == "") 
+                throw new Error("Param type is required")
 
-            var sos = await Sos.list(is_confirm)
+            var sos = await Sos.list(type)
 
             var data = []
 

@@ -7,9 +7,30 @@ module.exports = {
             var query = `SELECT s.uid, s.location, s.media, st.name AS type, s.lat, s.lng, s.country, s.is_finish, s.is_confirm, s.time, s.user_id, s.user_agent_id
             FROM sos s
             INNER JOIN sos_types st ON st.id = s.sos_type
-            WHERE s.is_confirm = ?`
+            WHERE s.is_confirm = 1`
 
-            conn.query(query, [isConfirm == "true" ? 1 : 0], (e, result) => {
+            if(type == "confirmed") {
+                query = `SELECT s.uid, s.location, s.media, st.name AS type, s.lat, s.lng, s.country, s.is_finish, s.is_confirm, s.time, s.user_id, s.user_agent_id
+                FROM sos s
+                INNER JOIN sos_types st ON st.id = s.sos_type
+                WHERE s.is_confirm = 1 AND s.is_finish = 1`
+            }
+
+            if(type == "waiting") {
+                query = `SELECT s.uid, s.location, s.media, st.name AS type, s.lat, s.lng, s.country, s.is_finish, s.is_confirm, s.time, s.user_id, s.user_agent_id
+                FROM sos s
+                INNER JOIN sos_types st ON st.id = s.sos_type
+                WHERE s.is_confirm = 0`
+            }
+
+            if(type == "process") {
+                query = `SELECT s.uid, s.location, s.media, st.name AS type, s.lat, s.lng, s.country, s.is_finish, s.is_confirm, s.time, s.user_id, s.user_agent_id
+                FROM sos s
+                INNER JOIN sos_types st ON st.id = s.sos_type
+                WHERE s.is_confirm = 1 AND s.is_finish = 0`
+            }
+
+            conn.query(query, (e, result) => {
                 if (e) {
                     reject(new Error(e))
                 } else {
