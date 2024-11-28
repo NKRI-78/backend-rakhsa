@@ -58,6 +58,9 @@ module.exports = {
                     is_finish: sosItem.is_finish == 1 
                     ? true 
                     : false,
+                    platform_type: sosItem.platform_type == 1 
+                    ? "Raksha" 
+                    : "Amulet",
                     sender: {
                         id: senderId,
                         name: senderName
