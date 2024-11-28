@@ -20,7 +20,7 @@ module.exports = {
 
     checkEws: () => {
         return new Promise((resolve, reject) => {
-            var query = `SELECT id, TIMESTAMPDIFF(HOUR, created_at, NOW()) AS difference FROM news`
+            var query = `SELECT id, TIMESTAMPDIFF(HOUR, created_at, NOW()) AS difference FROM news WHERE type = 1`
             conn.query(query, (e, result) => {
                 if (e) {
                     reject(new Error(e))

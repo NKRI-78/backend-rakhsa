@@ -9,10 +9,7 @@ const config = require("./src/configs/configs")
 const port = config.port
 const cors = require("cors")
 const routerNav = require("./src/index")
-const Event = require("./src/models/Event")
 const News = require("./src/models/News")
-
-const db = require('./src/configs/db');
 
 app.use(fileUpload())
 app.use(logger("dev"))
@@ -30,7 +27,7 @@ var CronJob = require('cron').CronJob
 // 0 */10 * * * * Every 10 minutes
 // 00 00 00 * * * Midgnight
 
-const job = new CronJob('00 00 00 * * *', async () => {
+const job = new CronJob('0 */5 * * * *', async () => {
 
   var ews = await News.checkEws()
 
