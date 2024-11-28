@@ -34,7 +34,7 @@ module.exports = {
 
     formKbri: (title, img, description, lat, lng, stateId) => {
         return new Promise((resolve, reject) => {
-            var query = `INSERT INTO (title, img, description, lat, lng, state_id) VALUES (?, ?, ?, ?, ?, ?)`
+            var query = `INSERT INTO kbris (title, img, description, lat, lng, state_id) VALUES (?, ?, ?, ?, ?, ?)`
             conn.query(query, [title, img, description, lat, lng, stateId], (e, result) => {
                 if(e) {
                     reject(new Error(e))

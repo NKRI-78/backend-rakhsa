@@ -1,6 +1,8 @@
 require("dotenv").config()
 
 const misc = require('../helpers/response')
+const Event = require("../models/Event")
+const Kbri = require("../models/Kbri")
 
 module.exports = {
 
@@ -12,7 +14,6 @@ module.exports = {
             if(typeof id == ":id" || id == "")
                 throw new Error("Param id is required")
 
-
             misc.response(res, 200, false, "")
         } catch(e) {
             console.log(e)
@@ -21,7 +22,7 @@ module.exports = {
     },
 
     formKbri: async (req, res) => {
-        const { title, img, description, lat, lng, state_id } = req.body
+        const { title, img, description, lat, lng, address, emergency_call, state_id } = req.body
 
         try {
 
@@ -39,11 +40,17 @@ module.exports = {
 
             if(typeof lng == "undefined" || lng == "")
                 throw new Error("Field lng is required")
+
+            if(typeof address == "undefined" || address == "")
+                throw new Error("Field address is required")
+
+            if(typeof emergency_call == "undefined" || emergency_call == "")
+                throw new Error("Field emergency_call is required")
             
             if(typeof state_id == "undefined" || state_id == "")
                 throw new Error("Field state_id is required")
 
-            await 
+            await Kbri.formKbri(title, img, description, lat, lng, address, state_id)
 
             misc.response(res, 200, false, "")
 
