@@ -23,10 +23,10 @@ module.exports = {
         })
     },
 
-    registerMember: (userId, otp, email, password) => {
+    registerMember: (userId, otp, email, phone, password) => {
         return new Promise((resolve, reject) => {
-            var query = `INSERT INTO users (uid, otp, email, password) VALUES (?, ?, ?, ?)`
-            conn.query(query, [userId, otp, email, password], (e, result) => {
+            var query = `INSERT INTO users (uid, otp, email, phone, password) VALUES (?, ?, ?, ?, ?)`
+            conn.query(query, [userId, otp, email, phone, password], (e, result) => {
                 if (e) {
                     reject(new Error(e))
                 } else {

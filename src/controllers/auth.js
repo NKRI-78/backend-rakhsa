@@ -85,6 +85,9 @@ module.exports = {
             if(typeof req.body.passport == "undefined" || req.body.passport == "")
                 throw new Error("Field passport is required")
 
+            if(typeof req.body.phone == "undefined" || req.body.phone == "")
+                throw new Error("Field phone is required")
+
             if(typeof req.body.emergency_contact == "undefined" || req.body.emergency_contact == "")
                 throw new Error("Field emergency_contact is required")
 
@@ -109,6 +112,7 @@ module.exports = {
                 userId,
                 otp,
                 req.body.email,
+                req.body.phone,
                 passwordHash
             )
 
