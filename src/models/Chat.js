@@ -66,7 +66,7 @@ module.exports = {
 
     checkMessages: (sender, receiverId) => {
         return new Promise ((resolve, reject) => {
-            var query = `SELECT FROM messages 
+            var query = `SELECT id FROM messages 
             WHERE sender_id = ? 
             OR receiver_id = ?
             ORDER BY created_at DESC`
