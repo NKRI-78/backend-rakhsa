@@ -9,14 +9,20 @@ module.exports = {
 
     list: async (req, res) => {
 
-        const { type } = req.query
+        const { type, lat, lng } = req.query
 
         try {
 
             if(typeof type == "undefined" || type == "")
                 throw new Error("Param Query type is required")
 
-            var news = await News.list(type)
+            if(typeof lat == "undefined" || lat == "")
+                throw new Error("Param Query lat is required")
+
+            if(typeof lng == "undefined" || lng == "")
+                throw new Error("Param Query lng is required")
+
+            var news = await News.list(type, lat, lng)
 
             var data = []
 
@@ -27,8 +33,6 @@ module.exports = {
                 var title = newsItem.title 
                 var img = newsItem.img
                 var desc = newsItem.description 
-                var lat = newsItem.lat
-                var lng = newsItem.lng
                 var newsType = newsItem.news_type 
                 var createdAt = newsItem.created_at
 
@@ -37,8 +41,8 @@ module.exports = {
                     title: title, 
                     img: img, 
                     desc: desc,
-                    lat: lat,
-                    lng: lng,
+                    lat: newsItem.lat,
+                    lng: newsItem.lng,
                     type: newsType,
                     created_at: fdate(createdAt)
                 })

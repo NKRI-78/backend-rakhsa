@@ -2,12 +2,23 @@ const conn = require('../configs/db')
 
 module.exports = {
 
-    list: (type) => {
+    list: (type, lat, lng) => {
         return new Promise((resolve, reject) => {
-            var query = `SELECT n.id, n.title, n.img, n.description, COALESCE(n.lat, '-') AS lat, COALESCE(n.lng, '-') AS lng, nt.name AS news_type, n.created_at, n.updated_at 
-            FROM news n 
-            INNER JOIN news_types nt ON nt.id = n.type
-            WHERE n.type = ?`
+            var query = `SELECT n.id, n.title, n.img, n.description, 
+                COALESCE(n.lat, '-') AS lat, 
+                COALESCE(n.lng, '-') AS lng, 
+                nt.name AS news_type, 
+                n.created_at, 
+                n.updated_at 
+                FROM news n 
+                INNER JOIN news_types nt ON nt.id = n.type
+                WHERE n.type = ?
+                AND (
+                    6371 * acos(
+                        cos(radians(?)) * cos(radians(n.lat)) * cos(radians(n.lng) - radians('${lat}')) + sin(radians('${lng}')) * sin(radians(n.lat))
+                    )
+                ) <= 3
+            `
             conn.query(query, [type == "news" ? 2 : 1], (e, result) => {
                 if (e) {
                     reject(new Error(e))
