@@ -19,7 +19,7 @@ module.exports = {
                     )
                 ) <= 3
             `
-            conn.query(query, [type == "news" ? 2 : 1], lng, lat, lng, (e, result) => {
+            conn.query(query, [type == "news" ? 2 : 1, lng, lat, lng], (e, result) => {
                 if (e) {
                     reject(new Error(e))
                 } else {
