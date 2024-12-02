@@ -15,11 +15,11 @@ module.exports = {
                 WHERE n.type = ?
                 AND (
                     6371 * acos(
-                        cos(radians(?)) * cos(radians(n.lat)) * cos(radians(n.lng) - radians('${lat}')) + sin(radians('${lng}')) * sin(radians(n.lat))
+                        cos(radians(?)) * cos(radians(n.lat)) * cos(radians(n.lng) - radians(?)) + sin(radians(?)) * sin(radians(n.lat))
                     )
                 ) <= 3
             `
-            conn.query(query, [type == "news" ? 2 : 1], (e, result) => {
+            conn.query(query, [type == "news" ? 2 : 1], lat, lng, (e, result) => {
                 if (e) {
                     reject(new Error(e))
                 } else {
