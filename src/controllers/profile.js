@@ -43,8 +43,16 @@ module.exports = {
             if(typeof req.body.address == "undefined" || req.body.address == "")
                 throw new Error("Field address is required")
 
+            if(typeof req.body.lat == "undefined" || req.body.lat == "")
+                throw new Error("Field lat is required")
+
+            if(typeof req.body.lng == "undefined" || req.body.lng == "")
+                throw new Error("Field lng is required")
+
             await Profile.updateAddress(
                 req.body.user_id, 
+                req.body.lat, 
+                req.body.lng,
                 req.body.address
             )
 

@@ -2,10 +2,10 @@ const conn = require('../configs/db')
 
 module.exports = {
 
-    updateAddress: (userId, address) => {
+    updateAddress: (userId, lat, lng, address) => {
         return new Promise((resolve, reject) => {
-            var query = `UPDATE profiles SET address = ? WHERE user_id = ?`
-            conn.query(query, [address, userId], (e, result) => {
+            var query = `UPDATE profiles SET lat = ?, lng = ?, address = ? WHERE user_id = ?`
+            conn.query(query, [lat, lng, address, userId], (e, result) => {
                 if (e) {
                     reject(new Error(e))
                 } else {
