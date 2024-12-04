@@ -2,9 +2,9 @@ const conn = require('../configs/db')
 
 module.exports = {
 
-    continents: () => {
+    continents: (continentId) => {
         return new Promise((resolve, reject) => {
-            var query = `SELECT id, name FROM continents`
+            var query = `SELECT id, name FROM continents WHERE id LIKE '%${continentId}%'`
             conn.query(query, (e, result) => {
                 if (e) {
                     reject(new Error(e))

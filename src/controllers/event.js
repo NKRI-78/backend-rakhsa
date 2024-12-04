@@ -113,6 +113,8 @@ module.exports = {
                 end_day: utils.fday(event.end_date),
                 start_date: utils.formatDateByName(event.start_date), 
                 end_date: utils.formatDateByName(event.end_date), 
+                start_date_unformatted: event.start_date,
+                end_date_unformatted: event.end_date,
                 user: {
                     id: users[0].user_id,
                     name: users[0].username, 

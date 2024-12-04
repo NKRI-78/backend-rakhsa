@@ -3,10 +3,13 @@ const misc = require("../helpers/response")
 
 module.exports = {
 
-    continents: async (_, res) => {
+    continents: async (req, res) => {
+        
+        const { continent_id } = req.query
+        
         try {
 
-            var continents = await Administration.continents()
+            var continents = await Administration.continents(continent_id)
 
             var data = []
 
@@ -27,12 +30,14 @@ module.exports = {
     },
 
     states: async (req, res) => {
+        const { continent_id } = req.body
+
         try {
 
-            if(typeof req.body.continent_id == "undefined" || req.body.continent_id == "")
+            if(typeof continent_id == "undefined" || continent_id == "")
                 throw new Error("Field continent_id is required")
 
-            var states = await Administration.states(req.body.continent_id)
+            var states = await Administration.states(continent_id)
 
             var data = []
 
@@ -80,17 +85,19 @@ module.exports = {
     },
 
     cities: async (req, res) => {
+        const { continent_id, state_id } = req.body
+
         try {
 
-            if(typeof req.body.continent_id == "undefined" || req.body.continent_id == "")
+            if(typeof continent_id == "undefined" || continent_id == "")
                 throw new Error("Field continent_id is required")
 
-            if(typeof req.body.state_id == "undefined" || req.body.state == "")
+            if(typeof state_id == "undefined" || state_id == "")
                 throw new Error("Field state_id is required")
 
             var cities = await Administration.cities(
-                req.body.continent_id,
-                req.body.state_id
+                continent_id,
+                state_id
             )
 
             var data = []
