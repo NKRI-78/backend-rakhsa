@@ -4,14 +4,16 @@ const misc = require("../helpers/response")
 module.exports = {
 
     continents: async (req, res) => {
-        
-        const { continent_id } = req.query
-        
         try {
 
-            var continents = await Administration.continents(continent_id)
+            var continents = await Administration.continents()
 
-            var data = []
+            var data = [
+                {
+                    id: 0,
+                    name: "Pilih Benua"
+                }
+            ]
 
             for (i in continents) {
                 var continent = continents[i]
@@ -39,7 +41,12 @@ module.exports = {
 
             var states = await Administration.states(continent_id)
 
-            var data = []
+            var data = [
+                {
+                    id: 0,
+                    name: "Pilih Negara"
+                }
+            ]
 
             for (i in states) {
                 var state = states[i]
