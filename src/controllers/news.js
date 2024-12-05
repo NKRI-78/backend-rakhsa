@@ -28,6 +28,7 @@ module.exports = {
                 var img = newsItem.img
                 var desc = newsItem.description 
                 var newsType = newsItem.news_type 
+                var distance = newsItem.distance
                 var createdAt = newsItem.created_at
 
                 data.push({
@@ -38,6 +39,7 @@ module.exports = {
                     lat: newsItem.lat,
                     lng: newsItem.lng,
                     type: newsType,
+                    distance: distance,
                     created_at: fdate(createdAt)
                 })
             }

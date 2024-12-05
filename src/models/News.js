@@ -9,6 +9,15 @@ module.exports = {
                 COALESCE(n.lat, '-') AS lat, 
                 COALESCE(n.lng, '-') AS lng, 
                 nt.name AS news_type, 
+                CONCAT(
+                    ROUND(
+                        6371 * acos(
+                            cos(radians(${lat})) * cos(radians(n.lat)) * cos(radians(n.lng) - radians(${lng})) +
+                            sin(radians(${lat})) * sin(radians(n.lat))
+                        ), 2
+                    ), 
+                    ' KM'
+                ) AS distance,
                 n.created_at, 
                 n.updated_at
                 FROM news n 
