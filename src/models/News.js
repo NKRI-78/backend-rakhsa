@@ -10,7 +10,7 @@ module.exports = {
                 COALESCE(n.lng, '-') AS lng, 
                 nt.name AS news_type, 
                 n.created_at, 
-                n.updated_at 
+                n.updated_at
                 FROM news n 
                 INNER JOIN news_types nt ON nt.id = n.type
                 WHERE n.type = ?
@@ -26,10 +26,8 @@ module.exports = {
             if(typeof isAdmin != "undefined" && isAdmin == true) {
                 values = [type == "news" ? 2 : 1]
             } else {
-                values = [type == "news" ? 2 : 1, lng, lat, lng]
+                values = [type == "news" ? 2 : 1, lat, lng, lat]
             }
-
-            console.log(values)
 
             conn.query(query, values, (e, result) => {
                 if (e) {
