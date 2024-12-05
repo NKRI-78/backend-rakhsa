@@ -23,11 +23,13 @@ module.exports = {
 
             var values = []
 
-            if(isAdmin == true) {
+            if(typeof isAdmin != "undefined" && isAdmin == true) {
                 values = [type == "news" ? 2 : 1]
             } else {
                 values = [type == "news" ? 2 : 1, lng, lat, lng]
             }
+
+            console.log(values)
 
             conn.query(query, values, (e, result) => {
                 if (e) {

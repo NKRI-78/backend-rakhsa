@@ -16,9 +16,6 @@ module.exports = {
             if(typeof type == "undefined" || type == "")
                 throw new Error("Param Query type is required")
 
-            if(typeof is_admin == "undefined" || is_admin == "")
-                throw new Error("Param Query is_admin is required")
-
             var news = await News.list(type, lat, lng, is_admin)
 
             var data = []
