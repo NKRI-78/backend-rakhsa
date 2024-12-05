@@ -2,7 +2,8 @@ const conn = require('../configs/db')
 
 module.exports = {
 
-    list: (type, lat, lng) => {
+
+    list: (type, lat, lng, isAdmin) => {
         return new Promise((resolve, reject) => {
             var query = `SELECT n.id, n.title, n.img, n.description, 
                 COALESCE(n.lat, '-') AS lat, 
@@ -19,7 +20,16 @@ module.exports = {
                     )
                 ) <= 3
             `
-            conn.query(query, [type == "news" ? 2 : 1, lng, lat, lng], (e, result) => {
+
+            var values = []
+
+            if(isAdmin == true) {
+                values = [type == "news" ? 2 : 1]
+            } else {
+                values = [type == "news" ? 2 : 1, lng, lat, lng]
+            }
+
+            conn.query(query, values, (e, result) => {
                 if (e) {
                     reject(new Error(e))
                 } else {

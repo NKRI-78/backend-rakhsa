@@ -9,20 +9,17 @@ module.exports = {
 
     list: async (req, res) => {
 
-        const { type, lat, lng } = req.query
+        const { type, lat, lng, is_admin } = req.query
 
         try {
 
             if(typeof type == "undefined" || type == "")
                 throw new Error("Param Query type is required")
 
-            if(typeof lat == "undefined" || lat == "")
-                throw new Error("Param Query lat is required")
+            if(typeof is_admin == "undefined" || is_admin == "")
+                throw new Error("Param Query is_admin is required")
 
-            if(typeof lng == "undefined" || lng == "")
-                throw new Error("Param Query lng is required")
-
-            var news = await News.list(type, lat, lng)
+            var news = await News.list(type, lat, lng, is_admin)
 
             var data = []
 
