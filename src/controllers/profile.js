@@ -7,12 +7,15 @@ const { fdate } = require("../helpers/utils")
 module.exports = {
 
     getProfile: async (req, res) => {
+
+        const { user_id } = req.body
+
         try {
 
-            if(req.body.user_id == "undefined")
+            if(user_id == "undefined")
                 throw new Error("Field user_id is required")
         
-            var users = await User.getUser(req.body.user_id)
+            var users = await User.getUser(user_id)
 
             if(users.length == 0)
                 throw new Error("User not found")
@@ -36,7 +39,7 @@ module.exports = {
         }
     },
 
-    updateProfileAvatar: async (req, res) => {
+    updateProfile: async (req, res) => {
 
         const { avatar, user_id } = req.body
 
@@ -62,25 +65,28 @@ module.exports = {
     },
 
     updateAddress: async (req, res) => {
+
+        const { user_id, address, lat, lng } = req.body
+
         try {
 
-            if(typeof req.body.user_id == "undefined" || req.body.user_id == "")
+            if(typeof user_id == "undefined" || user_id == "")
                 throw new Error("Field user_id is required")
 
-            if(typeof req.body.address == "undefined" || req.body.address == "")
-                throw new Error("Field address is required")
-
-            if(typeof req.body.lat == "undefined" || req.body.lat == "")
+            if(typeof lat == "undefined" || lat == "")
                 throw new Error("Field lat is required")
 
-            if(typeof req.body.lng == "undefined" || req.body.lng == "")
+            if(typeof lng == "undefined" || lng == "")
                 throw new Error("Field lng is required")
 
+            if(typeof address == "undefined" || address == "")
+                throw new Error("Field address is required")
+
             await Profile.updateAddress(
-                req.body.user_id, 
-                req.body.lat, 
-                req.body.lng,
-                req.body.address
+                user_id, 
+                lat, 
+                lng,
+                address
             )
 
             misc.response(res, 200, false, "")
