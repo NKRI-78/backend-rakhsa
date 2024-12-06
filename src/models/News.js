@@ -2,14 +2,24 @@ const conn = require('../configs/db')
 
 module.exports = {
 
-    list: (type, lat, lng) => {
+
+    list: (type, lat, lng, isAdmin) => {
         return new Promise((resolve, reject) => {
             var query = `SELECT n.id, n.title, n.img, n.description, 
                 COALESCE(n.lat, '-') AS lat, 
                 COALESCE(n.lng, '-') AS lng, 
                 nt.name AS news_type, 
+                CONCAT(
+                    ROUND(
+                        6371 * acos(
+                            cos(radians(${lat})) * cos(radians(n.lat)) * cos(radians(n.lng) - radians(${lng})) +
+                            sin(radians(${lat})) * sin(radians(n.lat))
+                        ), 2
+                    ), 
+                    ' KM'
+                ) AS distance,
                 n.created_at, 
-                n.updated_at 
+                n.updated_at
                 FROM news n 
                 INNER JOIN news_types nt ON nt.id = n.type
                 WHERE n.type = ?
@@ -19,7 +29,16 @@ module.exports = {
                     )
                 ) <= 3
             `
-            conn.query(query, [type == "news" ? 2 : 1, lng, lat, lng], (e, result) => {
+
+            var values = []
+
+            if(typeof isAdmin != "undefined" && isAdmin == true) {
+                values = [type == "news" ? 2 : 1]
+            } else {
+                values = [type == "news" ? 2 : 1, lat, lng, lat]
+            }
+
+            conn.query(query, values, (e, result) => {
                 if (e) {
                     reject(new Error(e))
                 } else {
