@@ -4,6 +4,7 @@ const profile = require("../controllers/profile")
 
 Route
     .post("/", profile.getProfile)
+    .post("/profile/update", profile.updateProfileAvatar)
     .post("/address/update", profile.updateAddress)
 
 module.exports = Route

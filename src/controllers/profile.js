@@ -36,6 +36,31 @@ module.exports = {
         }
     },
 
+    updateProfileAvatar: async (req, res) => {
+
+        const { avatar, user_id } = req.body
+
+        try {
+
+            if(typeof avatar == "undefined" || avatar == "")
+                throw new Error("Field avatar is required")
+
+            if(typeof user_id == "undefined" || user_id == "")
+                throw new Error("Field user_id is required")
+
+            await Profile.updateProfileAvatar(
+                avatar,
+                user_id, 
+            )
+
+            misc.response(res, 200, false, "")
+
+        } catch(e) {
+            console.log(e)
+            misc.response(res, 400, true, e.message)
+        } 
+    },
+
     updateAddress: async (req, res) => {
         try {
 

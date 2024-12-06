@@ -15,4 +15,17 @@ module.exports = {
         })
     },
 
+    updateProfileAvatar: (avatar, userId) => {
+        return new Promise((resolve, reject) => {
+            var query = `UPDATE profiles SET avatar = ? WHERE user_id = ?`
+            conn.query(query, [avatar, userId], (e, result) => {
+                if (e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+    }
+
 }
