@@ -4,7 +4,7 @@ module.exports = {
 
     getUser: (userId) => {
         return new Promise((resolve, reject) => {
-            var query = `SELECT u.uid AS user_id, u.email, p.emergency_contact, p.avatar, p.created_at, p.passport, p.address, p.fullname AS username
+            var query = `SELECT u.uid AS user_id, u.email, u.phone AS contact, p.emergency_contact, p.avatar, p.created_at, p.passport, p.address, p.fullname AS username
                 FROM users u
                 INNER JOIN profiles p ON u.uid = p.user_id
                 WHERE u.uid = ?

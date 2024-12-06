@@ -26,6 +26,7 @@ module.exports = {
                 avatar: user.avatar,
                 address: user.address ?? "-",
                 passport: user.passport ?? "-",
+                contact: user.contact ?? "-",
                 emergency_contact: user.emergency_contact ?? "-",
                 created_at: fdate(user.created_at)
             })
