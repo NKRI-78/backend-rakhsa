@@ -22,6 +22,7 @@ module.exports = {
             misc.response(res, 200, false, "", {
                 id: user.user_id,
                 username: user.username,
+                email: user.email,
                 avatar: user.avatar,
                 address: user.address ?? "-",
                 passport: user.passport ?? "-",

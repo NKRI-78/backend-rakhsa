@@ -3,7 +3,7 @@ const misc = require("../helpers/response")
 
 module.exports = {
 
-    continents: async (req, res) => {
+    continents: async (_, res) => {
         try {
 
             var continents = await Administration.continents()
