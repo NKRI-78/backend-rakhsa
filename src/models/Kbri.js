@@ -32,13 +32,21 @@ module.exports = {
         })
     },
 
+    infoKbriByState: (stateId) => {
+        return new Promise((resolve, reject) => {
+            var query = `SELECT title, img, description, lat, lng, address, emergency_call 
+            FROM kbris WHERE state_id = ?`
+            conn.query(query, [stateId], (e, result) => {
+                if(e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(result)
+                }
+            })  
+        })
+    },
+
     formKbri: (title, img, description, lat, lng, address, stateId) => {
-        console.log(title)
-        console.log(img) 
-        console.log(description)
-        console.log(lat)
-        console.log(lng)
-        console.log(stateId)
         return new Promise((resolve, reject) => {
             var query = `INSERT INTO kbris (title, img, description, lat, lng, address, state_id) VALUES (?, ?, ?, ?, ?, ?, ?)`
             conn.query(query, [title, img, description, lat, lng, address, stateId], (e, result) => {

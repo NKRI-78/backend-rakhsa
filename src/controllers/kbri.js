@@ -11,14 +11,41 @@ module.exports = {
 
         try {
 
-            if(typeof id == ":id" || id == "")
+            if(typeof id == "undefined" || id == ":id")
                 throw new Error("Param id is required")
 
             var kbris = await Kbri.infoKbri(id)
+         
+            if(kbris.length == 0)
+                throw new Error("Kbri not found")
 
-            console.log(kbris)
+            var data = kbris[0]
 
-            misc.response(res, 200, false, "")
+            misc.response(res, 200, false, "", data)
+        } catch(e) {
+            console.log(e)
+            misc.response(res, 400, true, e.message)
+        }
+    },
+
+    infoKbriState: async (req, res) => {
+        const { state_id } = req.params
+
+        console.log(state_id)
+
+        try {
+
+            if(typeof state_id == "undefined" || state_id == ":state_id")
+                throw new Error("Param state_id is required")
+
+            var kbris = await Kbri.infoKbriByState(state_id)
+
+            if(kbris.length == 0)
+                throw new Error("Kbri not found")
+
+            var data = kbris[0]
+
+            misc.response(res, 200, false, "",  data)
         } catch(e) {
             console.log(e)
             misc.response(res, 400, true, e.message)
