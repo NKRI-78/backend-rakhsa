@@ -125,8 +125,11 @@ module.exports = {
     
                 data.push({
                     chat: {
-                        id: chat.chat_id
+                        id: chat.chat_id,
                     },
+                    is_confirm: chat.is_confirm == 1 
+                    ? true 
+                    : false,
                     user: {
                         id: chat.user_id,
                         avatar: chat.avatar ?? "-",
