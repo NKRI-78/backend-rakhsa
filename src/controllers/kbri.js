@@ -31,8 +31,6 @@ module.exports = {
     infoKbriState: async (req, res) => {
         const { state_id } = req.params
 
-        console.log(state_id)
-
         try {
 
             if(typeof state_id == "undefined" || state_id == ":state_id")
