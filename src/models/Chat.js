@@ -36,7 +36,7 @@ module.exports = {
                     reject(new Error(e))
                 } else {
                     resolve(result)
-                }
+                }``
             })
         })
     },
