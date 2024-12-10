@@ -1,7 +1,6 @@
 require("dotenv").config()
 
 const misc = require('../helpers/response')
-const Event = require("../models/Event")
 const Kbri = require("../models/Kbri")
 
 module.exports = {
@@ -31,8 +30,6 @@ module.exports = {
     infoKbriState: async (req, res) => {
         const { state_id } = req.params
 
-        console.log(state_id)
-
         try {
 
             if(typeof state_id == "undefined" || state_id == ":state_id")
@@ -53,7 +50,10 @@ module.exports = {
     },
 
     formKbri: async (req, res) => {
-        const { title, img, description, lat, lng, address, emergency_call, state_id } = req.body
+        const { 
+            title, img, description, lat, lng, 
+            address, emergency_call, state_id 
+        } = req.body
 
         try {
 
