@@ -36,14 +36,14 @@ module.exports = {
                     reject(new Error(e))
                 } else {
                     resolve(result)
-                }
+                }``
             })
         })
     },
 
     getChats: (senderId) => {
         return new Promise ((resolve, reject) => {
-            var query = `SELECT c.uid AS chat_id, p.user_id, p.fullname, p.avatar
+            var query = `SELECT c.uid AS chat_id, c.is_confirm, p.user_id, p.fullname, p.avatar
             FROM chats c, users u
             INNER JOIN profiles p ON p.user_id = u.uid
             WHERE  

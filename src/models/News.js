@@ -32,10 +32,44 @@ module.exports = {
 
             var values = []
 
-            if(typeof isAdmin != "undefined" && isAdmin == true) {
-                values = [type == "news" ? 2 : 1]
+            if(isAdmin == "true" && type == "news") {
+                query = `SELECT n.id, n.title, n.img, n.description, 
+                    COALESCE(n.lat, '-') AS lat, 
+                    COALESCE(n.lng, '-') AS lng, 
+                    nt.name AS news_type, 
+                    n.created_at, 
+                    n.updated_at
+                    FROM news n 
+                    INNER JOIN news_types nt ON nt.id = n.type
+                    WHERE n.type = ?
+                `
+                var values = [2]
+            } else if(isAdmin == "true" && type == "ews") {
+                query = `SELECT n.id, n.title, n.img, n.description, 
+                    COALESCE(n.lat, '-') AS lat, 
+                    COALESCE(n.lng, '-') AS lng, 
+                    nt.name AS news_type, 
+                    n.created_at, 
+                    n.updated_at
+                    FROM news n 
+                    INNER JOIN news_types nt ON nt.id = n.type
+                    WHERE n.type = ?
+                `
+                var values = [1]
+            }  else if(isAdmin == "false" && type == "news") {
+                query = `SELECT n.id, n.title, n.img, n.description, 
+                    COALESCE(n.lat, '-') AS lat, 
+                    COALESCE(n.lng, '-') AS lng, 
+                    nt.name AS news_type, 
+                    n.created_at, 
+                    n.updated_at
+                    FROM news n 
+                    INNER JOIN news_types nt ON nt.id = n.type
+                    WHERE n.type = ?
+                `
+                var values = [2]
             } else {
-                values = [type == "news" ? 2 : 1, lat, lng, lat]
+                values = [1, lat, lng, lat]
             }
 
             conn.query(query, values, (e, result) => {

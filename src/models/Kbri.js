@@ -34,8 +34,10 @@ module.exports = {
 
     infoKbriByState: (stateId) => {
         return new Promise((resolve, reject) => {
-            var query = `SELECT title, img, description, lat, lng, address, emergency_call 
-            FROM kbris WHERE state_id = ?`
+            var query = `SELECT k.title, k.img, k.description, k.lat, k.lng, k.address, k.emergency_call, s.name AS state_name
+            FROM kbris k
+            INNER JOIN states s ON s.id = k.state_id
+            WHERE k.state_id = ?`
             conn.query(query, [stateId], (e, result) => {
                 if(e) {
                     reject(new Error(e))
