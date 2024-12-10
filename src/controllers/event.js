@@ -29,8 +29,8 @@ module.exports = {
                     start_date: utils.formatDateByName(event.start_date), 
                     end_date: utils.formatDateByName(event.end_date), 
                     user: {
-                        id: users[0].user_id,
-                        name: users[0].username, 
+                        id: users.length == 0 ?  "_" : users[0].user_id,
+                        name: users.length == 0 ?  "_" : users[0].fullname, 
                     }
                 })
             }
