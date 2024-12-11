@@ -149,6 +149,29 @@ module.exports = {
 
     },
 
+    ratingSos: async (req, res) => {
+        const { id, rate, user_id } = req.body
+
+        try {
+
+            if(typeof id == "undefined" || id == "")
+                throw new Error("Field id is required")
+
+            if(typeof rate == "undefined" || rate == "")
+                throw new Error("Field rate is required")
+        
+            if(typeof user_id == "undefined" || user_id == "")
+                throw new Error("Field user_id is required")
+
+            await Sos.ratingSos(id, rate, user_id)
+
+            misc.response(res, 200, false, "", null)
+        } catch(e) {
+            console.log(e)
+            misc.response(res, 400, true, e.message)
+        }
+    },
+
     expireSos: async (req, res) => {
         const { id } = req.body
          

@@ -92,6 +92,20 @@ module.exports = {
         })
     },
 
+    ratingSos: (sosId, rate, userId) => {
+        return new Promise((resolve, reject) => {
+            var query = `INSERT INTO sos_ratings (sos_id, rate, user_id) 
+            VALUES (?, ?, ?)`
+            conn.query(query, [sosId, rate, userId], (e, result) => {
+                if (e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+    },
+
     checkExpireSos: (sosId) => {
         return new Promise((resolve, reject) => {
             var query = `SELECT uid FROM sos WHERE uid = ? 
