@@ -18,6 +18,8 @@ module.exports = {
 
                 var users = await User.getUser(event.user_id)
 
+                console.log(users)
+
                 data.push({
                     id: event.id,
                     title: event.title, 
@@ -30,7 +32,7 @@ module.exports = {
                     end_date: utils.formatDateByName(event.end_date), 
                     user: {
                         id: users.length == 0 ?  "_" : users[0].user_id,
-                        name: users.length == 0 ?  "_" : users[0].fullname, 
+                        name: users.length == 0 ?  "_" : users[0].username, 
                     }
                 })
             }
