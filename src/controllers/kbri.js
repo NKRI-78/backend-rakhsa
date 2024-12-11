@@ -48,6 +48,9 @@ module.exports = {
                 })
             }
 
+            if(data.length == 0) 
+                throw new Error("Visa not found")
+
             misc.response(res, 200, false, "", data[0])
         } catch(e) {
             console.log(e)
