@@ -27,6 +27,34 @@ module.exports = {
         }
     },
 
+    infoVisa: async (req, res) => {
+        const { state_id } = req.query
+
+        try {
+
+            if(typeof state_id == "undefined" || state_id == ":state_id")
+                throw new Error("Field state_id is required")
+
+            var visaContents = await Kbri.infoVisaContent(state_id)
+
+            var data = []
+
+            for (const i in visaContents) {
+                var visa = visaContents[i]
+
+                data.push({
+                    id: visa.id,
+                    content: visa.content
+                })
+            }
+
+            misc.response(res, 200, false, "", data[0])
+        } catch(e) {
+            console.log(e)
+            misc.response(res, 400, true, e.message)
+        }
+    },
+
     infoKbriState: async (req, res) => {
         const { state_id } = req.params
 

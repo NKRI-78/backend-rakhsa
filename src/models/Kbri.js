@@ -32,6 +32,21 @@ module.exports = {
         })
     },
 
+    infoVisaContent: (stateId) => {
+        return new Promise((resolve, reject) => {
+            var query = `SELECT content 
+            FROM visa_contents 
+            WHERE state_id = ?`
+            conn.query(query, [stateId], (e, result) => {
+                if(e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(result)
+                }
+            })  
+        })
+    },
+
     infoKbriByState: (stateId) => {
         return new Promise((resolve, reject) => {
             var query = `SELECT k.title, k.img, k.description, k.lat, k.lng, k.address, k.emergency_call, s.name AS state_name

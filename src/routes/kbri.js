@@ -4,6 +4,7 @@ const kbri = require("../controllers/kbri")
 
 Route
     .get("/info-kbri/:id", kbri.infoKbri)
+    .get("/info-visa", kbri.infoVisa)
     .get("/info-kbri-state/:state_id", kbri.infoKbriState)
     .post("/form-kbri", kbri.formKbri)
 
