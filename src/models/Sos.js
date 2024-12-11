@@ -46,6 +46,22 @@ module.exports = {
         })
     },
 
+    rating: (id) => {
+        return new Promise((resolve, reject) => {
+            var query = `SELECT sr.rate, p.fullname 
+            FROM sos_ratings sr 
+            INNER JOIN profiles p ON p.user_id = sr.user_id 
+            WHERE sr.sos_id = ?`
+            conn.query(query, [id], (e, result) => {
+                if (e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+    },
+
     detail: (id) => {
         return new Promise((resolve, reject) => {
             var query = `SELECT s.uid, s.location, s.media, st.name AS type, s.lat, s.lng, s.country, s.is_finish, s.is_confirm, s.time, s.user_id, s.user_agent_id

@@ -40,10 +40,13 @@ module.exports = {
 
                 var continentName = kbri.length == 0 ? "-" : kbri[0].continent_name
 
+                var ratings = await Sos.rating(sosItem.uid)
+
                 data.push({
                     id: sosItem.uid,
                     media: sosItem.media,
                     type: sosItem.type,
+                    ratings: ratings,
                     location: sosItem.location,
                     country: sosItem.country,
                     chat_id: chats.length == 0 
