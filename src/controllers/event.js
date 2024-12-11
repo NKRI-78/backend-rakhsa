@@ -18,8 +18,6 @@ module.exports = {
 
                 var users = await User.getUser(event.user_id)
 
-                console.log(users)
-
                 data.push({
                     id: event.id,
                     title: event.title, 

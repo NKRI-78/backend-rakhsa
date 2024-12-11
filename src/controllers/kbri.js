@@ -27,6 +27,37 @@ module.exports = {
         }
     },
 
+    infoPassport: async (req, res) => {
+        const { state_id } = req.query
+
+        try {
+
+            if(typeof state_id == "undefined" || state_id == ":state_id")
+                throw new Error("Field state_id is required")
+
+            var passports = await Kbri.infoPassportContent(state_id)
+
+            var data = []
+
+            for (const i in passports) {
+                var passport = passports[i]
+
+                data.push({
+                    id: passport.id,
+                    content: passport.content
+                })
+            }
+
+            if(data.length == 0) 
+                throw new Error("Passport not found")
+
+            misc.response(res, 200, false, "", data[0])
+        } catch(e) {
+            console.log(e)
+            misc.response(res, 400, true, e.message)
+        }
+    },
+
     infoVisa: async (req, res) => {
         const { state_id } = req.query
 
