@@ -44,10 +44,10 @@ module.exports = {
     getChats: (senderId) => {
         return new Promise ((resolve, reject) => {
             var query = `SELECT c.uid AS chat_id, 
-                c.is_confirm, 
                 p.user_id, 
                 p.fullname, 
                 p.avatar, 
+                s.is_confirm,
                 s.is_finish, 
                 s.is_closed, 
                 s.is_resolved
