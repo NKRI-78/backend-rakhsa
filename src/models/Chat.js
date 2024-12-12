@@ -47,6 +47,7 @@ module.exports = {
                 p.user_id, 
                 p.fullname, 
                 p.avatar, 
+                c.created_at,
                 s.is_confirm,
                 s.is_finish, 
                 s.is_closed, 
