@@ -43,16 +43,21 @@ module.exports = {
 
     getChats: (senderId) => {
         return new Promise ((resolve, reject) => {
-            var query = `SELECT c.uid AS chat_id, c.is_confirm, p.user_id, p.fullname, p.avatar
-            FROM chats c, users u
-            INNER JOIN profiles p ON p.user_id = u.uid
-            WHERE  
-            CASE 
-                WHEN c.sender_id = ?
-                THEN c.receiver_id = p.user_id
-                WHEN c.receiver_id = ?
-                THEN c.sender_id = p.user_id
-            END`
+            var query = `SELECT c.uid AS chat_id, 
+                c.is_confirm, 
+                p.user_id, 
+                p.fullname, 
+                p.avatar, 
+                s.is_finish, 
+                s.is_closed, 
+                s.is_resolved
+                FROM chats c
+                INNER JOIN users u ON u.uid IN (c.sender_id, c.receiver_id)
+                INNER JOIN profiles p ON p.user_id = u.uid
+                INNER JOIN sos s ON s.uid = c.sos_id
+                WHERE (c.sender_id = ? AND c.receiver_id = p.user_id) 
+                OR (c.receiver_id = ? AND c.sender_id = p.user_id)
+            `
 
             conn.query(query, [senderId, senderId], (e, result) => {
                 if(e) {
