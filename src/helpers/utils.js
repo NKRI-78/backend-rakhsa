@@ -68,8 +68,7 @@ module.exports = {
     },
 
     fdate: (date) => {
-        console.log(date)
-        return moment(date).locale('id').format('dddd, d MMM YYYY')
+        return moment(date).locale('id').format('dddd, DD MMM YYYY')
     },
 
     formatYearAndMonth(date) {

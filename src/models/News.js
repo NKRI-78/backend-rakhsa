@@ -42,6 +42,7 @@ module.exports = {
                     FROM news n 
                     INNER JOIN news_types nt ON nt.id = n.type
                     WHERE n.type = ?
+                    ORDER BY created_at DESC
                 `
                 var values = [2]
             } else if(isAdmin == "true" && type == "ews") {
@@ -54,6 +55,7 @@ module.exports = {
                     FROM news n 
                     INNER JOIN news_types nt ON nt.id = n.type
                     WHERE n.type = ?
+                    ORDER BY created_at DESC
                 `
                 var values = [1]
             }  else if(isAdmin == "false" && type == "news") {
@@ -66,6 +68,7 @@ module.exports = {
                     FROM news n 
                     INNER JOIN news_types nt ON nt.id = n.type
                     WHERE n.type = ?
+                    ORDER BY created_at DESC
                 `
                 var values = [2]
             } else {
