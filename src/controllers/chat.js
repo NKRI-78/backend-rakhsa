@@ -139,7 +139,7 @@ module.exports = {
                     is_closed: chat.is_closed == 1 
                     ? true 
                     : false,
-                    created_at: moment(message.created_at).format('HH:mm'),
+                    created_at: moment(chat.created_at).format('HH:mm'),
                     user: {
                         id: chat.user_id,
                         avatar: chat.avatar ?? "-",
