@@ -18,7 +18,7 @@ module.exports = {
         })
     },
     
-    getChat: (chatId, receiverId) => {
+    getChat: (chatId, senderId) => {
         return new Promise ((resolve, reject) => {
             const query = `SELECT c.uid AS chat_id, p.user_id, p.fullname, p.avatar
             FROM chats c, users u
@@ -31,7 +31,7 @@ module.exports = {
                 THEN c.sender_id = p.user_id
             END
             AND c.uid = ?` 
-            conn.query(query, [receiverId, receiverId, chatId], (e, result) => {
+            conn.query(query, [senderId, senderId, chatId], (e, result) => {
                 if(e) { 
                     reject(new Error(e))
                 } else {
