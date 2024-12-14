@@ -128,18 +128,7 @@ module.exports = {
                     chat: {
                         id: chat.chat_id,
                     },
-                    is_finish: chat.is_finish == 1 
-                    ? true 
-                    : false,
-                    is_confirm: chat.is_confirm == 1 
-                    ? true 
-                    : false,
-                    is_resolved: chat.is_resolved == 1 
-                    ? true 
-                    : false,
-                    is_closed: chat.is_closed == 1 
-                    ? true 
-                    : false,
+                    status: chat.status,
                     created_at: moment(chat.created_at).format('HH:mm'),
                     user: {
                         id: chat.user_id,

@@ -48,14 +48,12 @@ module.exports = {
                 p.fullname, 
                 p.avatar, 
                 c.created_at,
-                s.is_confirm,
-                s.is_finish, 
-                s.is_closed, 
-                s.is_resolved
+                sat.name AS status
                 FROM chats c
                 INNER JOIN users u ON u.uid IN (c.sender_id, c.receiver_id)
                 INNER JOIN profiles p ON p.user_id = u.uid
                 INNER JOIN sos s ON s.uid = c.sos_id
+                INNER JOIN sos_activity_types sat ON sat.id = s.sos_activity_type
                 WHERE (c.sender_id = ? AND c.receiver_id = p.user_id) 
                 OR (c.receiver_id = ? AND c.sender_id = p.user_id)
             `

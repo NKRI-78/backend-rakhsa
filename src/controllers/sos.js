@@ -55,15 +55,8 @@ module.exports = {
                     lat: sosItem.lat,
                     lng: sosItem.lng,
                     time: sosItem.time,
-                    is_confirm: sosItem.is_confirm == 1 
-                    ? true 
-                    : false,
-                    is_finish: sosItem.is_finish == 1 
-                    ? true 
-                    : false,
-                    platform_type: sosItem.platform_type == 1 
-                    ? "Raksha" 
-                    : "Amulet",
+                    status: sosItem.status,
+                    platform_type: sosItem.platform,
                     sender: {
                         id: senderId,
                         name: senderName
@@ -123,12 +116,6 @@ module.exports = {
                 lat: sosItem.lat,
                 lng: sosItem.lng,
                 time: sosItem.time,
-                is_confirm: sosItem.is_confirm == 1 
-                ? true 
-                : false,
-                is_finish: sosItem.is_finish == 1 
-                ? true 
-                : false,
                 sender: {
                     id: senderId,
                     name: senderName

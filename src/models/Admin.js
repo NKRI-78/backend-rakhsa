@@ -17,7 +17,7 @@ module.exports = {
 
     confirmSos: (sosId, userId) => {
         return new Promise((resolve, reject) => {
-            var query = `UPDATE sos SET is_confirm = 1, user_id = ?
+            var query = `UPDATE sos SET sos_activity_type = 3, user_id = ?
             WHERE uid = ?`
             conn.query(query, [userId, sosId], (e, result) => {
                 if (e) {
