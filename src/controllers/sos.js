@@ -5,6 +5,8 @@ const Sos = require('../models/Sos')
 const User = require('../models/User')
 const Chat = require('../models/Chat')
 
+const { formatDateWithSeconds } = require('../helpers/utils')
+
 module.exports = {
     
     list: async (req, res) => {
@@ -55,7 +57,7 @@ module.exports = {
                     lat: sosItem.lat,
                     lng: sosItem.lng,
                     time: sosItem.time,
-                    created_at: sosItem.created_at,
+                    created_at:  formatDateWithSeconds(sosItem.created_at),
                     status: sosItem.status,
                     platform_type: sosItem.platform,
                     sender: {
