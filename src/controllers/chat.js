@@ -131,7 +131,7 @@ module.exports = {
                         id: chat.chat_id,
                     },
                     status: chat.status,
-                    note: chat.note,
+                    note: chat.note ?? "",
                     created_at: moment(chat.created_at).format('HH:mm'),
                     user: {
                         id: chat.user_id,
