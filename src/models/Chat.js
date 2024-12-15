@@ -53,6 +53,7 @@ module.exports = {
             p.fullname, 
             p.avatar, 
             c.created_at, 
+            c.id AS ticket,
             c.sos_id, 
             sat.name AS status, 
             s.agent_note AS note
@@ -73,6 +74,7 @@ module.exports = {
                 p.fullname, 
                 p.avatar, 
                 c.created_at, 
+                c.id AS ticket,
                 c.sos_id, 
                 sat.name AS status, 
                 s.agent_note AS note

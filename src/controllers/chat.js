@@ -130,6 +130,7 @@ module.exports = {
                 }
     
                 data.push({
+                    id: `#${chat.ticket}`,
                     chat: {
                         id: chat.chat_id,
                     },
