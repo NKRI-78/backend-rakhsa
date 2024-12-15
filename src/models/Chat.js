@@ -45,7 +45,7 @@ module.exports = {
         })
     },
 
-    getChats: (senderId) => {
+    getChats: (senderId, isAgent) => {
         return new Promise ((resolve, reject) => {
             var query = `SELECT 
             c.uid AS chat_id, 
@@ -66,6 +66,26 @@ module.exports = {
                 OR (c.receiver_id = ? AND c.sender_id = p.user_id)
             )
             AND s.sos_activity_type IN (3, 5)`
+            if(isAgent) {
+                query = `SELECT 
+                c.uid AS chat_id, 
+                p.user_id, 
+                p.fullname, 
+                p.avatar, 
+                c.created_at, 
+                c.sos_id, 
+                sat.name AS status, 
+                s.agent_note AS note
+                FROM chats c
+                INNER JOIN sos s ON s.uid = c.sos_id
+                INNER JOIN sos_activity_types sat ON sat.id = s.sos_activity_type
+                INNER JOIN users u ON u.uid IN (c.sender_id, c.receiver_id)
+                INNER JOIN profiles p ON p.user_id = u.uid
+                WHERE (
+                    (c.sender_id = ? AND c.receiver_id = p.user_id) 
+                    OR (c.receiver_id = ? AND c.sender_id = p.user_id)
+                )`
+            }
             conn.query(query, [senderId, senderId], (e, result) => {
                 if(e) {
                     reject(new Error(e))
