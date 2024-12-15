@@ -48,7 +48,8 @@ module.exports = {
                 p.fullname, 
                 p.avatar, 
                 c.created_at,
-                sat.name AS status
+                sat.name AS status,
+                s.agent_note AS note
                 FROM chats c
                 INNER JOIN users u ON u.uid IN (c.sender_id, c.receiver_id)
                 INNER JOIN profiles p ON p.user_id = u.uid
