@@ -95,7 +95,10 @@ module.exports = {
             if(typeof user_id == "undefined" || user_id == "")
                 throw new Error("Field user_id is required")
     
-            var chats = await Chat.getChats(user_id, is_agent)
+            var chats = await Chat.getChats(
+                user_id, 
+                is_agent
+            )
     
             var data = []
     
