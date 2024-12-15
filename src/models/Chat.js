@@ -20,9 +20,10 @@ module.exports = {
     
     getChat: (chatId, senderId) => {
         return new Promise ((resolve, reject) => {
-            const query = `SELECT c.uid AS chat_id, c.sos_id, p.user_id, p.fullname, p.avatar
+            const query = `SELECT c.uid AS chat_id, c.sos_id, s.agent_note AS note, p.user_id, p.fullname, p.avatar
             FROM chats c, users u
             INNER JOIN profiles p ON p.user_id = u.uid
+            INNER JOIN sos s ON s.uid = c.sos_id
             WHERE  
             CASE 
                 WHEN c.sender_id = ?
