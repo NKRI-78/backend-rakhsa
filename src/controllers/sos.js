@@ -182,6 +182,23 @@ module.exports = {
         }
     },
 
+    moveSosToRecently: async (req, res) => {
+        const { id } = req.body 
+
+        try {
+
+            if(typeof id == "undefined" || id == "")
+                throw new Error("Field id is required")
+
+            await Sos.moveSosToRecently(id)
+
+            misc.response(res, 200, false, "", null)
+        } catch(e) {
+            console.log(e)
+            misc.response(res, 400, true, e.message)
+        }
+    },
+
     expireSos: async (req, res) => {
         const { id } = req.body
          
