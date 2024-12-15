@@ -62,8 +62,8 @@ module.exports = {
                 INNER JOIN sos_activity_types sat ON sat.id = s.sos_activity_type
                 WHERE (c.sender_id = ? AND c.receiver_id = p.user_id) 
                 OR (c.receiver_id = ? AND c.sender_id = p.user_id)
-                OR s.sos_activity_type = 3 
-                OR s.sos_activity_type = 5
+                AND (s.sos_activity_type = 3 
+                OR s.sos_activity_type = 5)
             `
 
             conn.query(query, [senderId, senderId], (e, result) => {
