@@ -137,6 +137,19 @@ module.exports = {
         })
     },
 
+    closeSos: (sosId, note) => {
+        return new Promise((resolve, reject) => {
+            var query = `UPDATE sos SET sos_activity_type = 5, agent_note = ? WHERE uid = ?`
+            conn.query(query, [note, sosId], (e, result) => {
+                if (e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+    },
+
     checkExpireSos: (sosId) => {
         return new Promise((resolve, reject) => {
             var query = `SELECT uid FROM sos WHERE uid = ? 

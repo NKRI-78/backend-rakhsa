@@ -159,6 +159,26 @@ module.exports = {
         }
     },
 
+    closeSos: async (req, res) => {
+        const { id, note } = req.body 
+
+        try {
+
+            if(typeof id == "undefined" || id == "")
+                throw new Error("Field id is required")
+
+            if(typeof note == "undefined" || note == "")
+                throw new Error("Field note is required")
+
+            await Sos.closeSos(id, note)
+
+            misc.response(res, 200, false, "", null)
+        } catch(e) {
+            console.log(e)
+            misc.response(res, 400, true, e.message)
+        }
+    },
+
     expireSos: async (req, res) => {
         const { id } = req.body
          
