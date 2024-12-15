@@ -22,6 +22,7 @@ module.exports = {
         return new Promise ((resolve, reject) => {
             const query = `SELECT c.uid AS chat_id, 
             c.sos_id, 
+            c.id AS ticket,
             sat.name AS status,
             s.agent_note AS note, 
             p.user_id, 
