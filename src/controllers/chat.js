@@ -62,7 +62,7 @@ module.exports = {
             misc.response(res, 200, false, "", {
                 chat_id: chat_id,
                 sos_id: recipient.sos_id,
-                note: recipient.note,
+                note: recipient.note ?? "",
                 recipient: {
                     id: recipient.user_id,
                     avatar: recipient.avatar ?? "-",
