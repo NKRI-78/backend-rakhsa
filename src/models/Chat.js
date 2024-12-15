@@ -52,6 +52,7 @@ module.exports = {
                 p.fullname, 
                 p.avatar, 
                 c.created_at,
+                c.sos_id,
                 sat.name AS status,
                 s.agent_note AS note
                 FROM chats c
