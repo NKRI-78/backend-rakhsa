@@ -7,7 +7,7 @@ module.exports = {
             var query
 
             if(type == "live") {
-                query = `SELECT s.uid, s.location, p.name AS platform, s.media, st.name AS type, s.lat, s.lng, s.country, sat.name AS status, s.time, s.user_id, s.user_agent_id
+                query = `SELECT s.uid, s.location, p.name AS platform, s.created_at, s.media, st.name AS type, s.lat, s.lng, s.country, sat.name AS status, s.time, s.user_id, s.user_agent_id
                 FROM sos s
                 INNER JOIN sos_types st ON st.id = s.sos_type
                 INNER JOIN platforms p ON p.id = s.platform_type
@@ -17,7 +17,7 @@ module.exports = {
             }
 
             if(type == "recently") {
-                query = `SELECT s.uid, s.location, p.name AS platform, s.media, st.name AS type, s.lat, s.lng, s.country, sat.name AS status, s.time, s.user_id, s.user_agent_id
+                query = `SELECT s.uid, s.location, p.name AS platform, s.created_at, s.media, st.name AS type, s.lat, s.lng, s.country, sat.name AS status, s.time, s.user_id, s.user_agent_id
                 FROM sos s
                 INNER JOIN sos_types st ON st.id = s.sos_type
                 INNER JOIN platforms p ON p.id = s.platform_type
@@ -27,7 +27,7 @@ module.exports = {
             }
 
             if(type == "process") {
-                query = `SELECT s.uid, s.location, p.name AS platform, s.media, st.name AS type, s.lat, s.lng, s.country, sat.name AS status, s.time, s.user_id, s.user_agent_id
+                query = `SELECT s.uid, s.location, p.name AS platform, s.created_at, s.media, st.name AS type, s.lat, s.lng, s.country, sat.name AS status, s.time, s.user_id, s.user_agent_id
                 FROM sos s
                 INNER JOIN sos_types st ON st.id = s.sos_type
                 INNER JOIN platforms p ON p.id = s.platform_type
@@ -37,7 +37,7 @@ module.exports = {
             }
 
             if(type == "resolved") {
-                query = `SELECT s.uid, s.location, p.name AS platform, s.media, st.name AS type, s.lat, s.lng, s.country, sat.name AS status, s.time, s.user_id, s.user_agent_id
+                query = `SELECT s.uid, s.location, p.name AS platform, s.created_at, s.media, st.name AS type, s.lat, s.lng, s.country, sat.name AS status, s.time, s.user_id, s.user_agent_id
                 FROM sos s
                 INNER JOIN sos_types st ON st.id = s.sos_type
                 INNER JOIN platforms p ON p.id = s.platform_type
@@ -47,7 +47,7 @@ module.exports = {
             }
 
             if(type == "closed") {
-                query = `SELECT s.uid, s.location, p.name AS platform, s.media, st.name AS type, s.lat, s.lng, s.country, sat.name AS status, s.time, s.user_id, s.user_agent_id
+                query = `SELECT s.uid, s.location, p.name AS platform, s.created_at, s.media, st.name AS type, s.lat, s.lng, s.country, sat.name AS status, s.time, s.user_id, s.user_agent_id
                 FROM sos s
                 INNER JOIN sos_types st ON st.id = s.sos_type
                 INNER JOIN platforms p ON p.id = s.platform_type
@@ -57,7 +57,7 @@ module.exports = {
             }
 
             if(type == "expire") {
-                query = `SELECT s.uid, s.location, p.name AS platform, s.media, st.name AS type, s.lat, s.lng, s.country, sat.name AS status, s.time, s.user_id, s.user_agent_id
+                query = `SELECT s.uid, s.location, p.name AS platform, s.created_at, s.media, st.name AS type, s.lat, s.lng, s.country, sat.name AS status, s.time, s.user_id, s.user_agent_id
                 FROM sos s
                 INNER JOIN sos_types st ON st.id = s.sos_type
                 INNER JOIN platforms p ON p.id = s.platform_type
