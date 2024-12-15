@@ -137,6 +137,19 @@ module.exports = {
         })
     },
 
+    resolveSos: (sosId) => {
+        return new Promise((resolve, reject) => {
+            var query = `UPDATE sos SET sos_activity_type = 4 WHERE uid = ?`
+            conn.query(query, [sosId], (e, result) => {
+                if (e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+    },
+
     closeSos: (sosId, note) => {
         return new Promise((resolve, reject) => {
             var query = `UPDATE sos SET sos_activity_type = 5, agent_note = ? WHERE uid = ?`

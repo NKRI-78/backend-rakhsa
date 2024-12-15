@@ -154,6 +154,7 @@ module.exports = {
                 throw new Error("Field user_id is required")
 
             await Sos.ratingSos(id, rate, user_id)
+            await Sos.resolveSos(id)
 
             misc.response(res, 200, false, "", null)
         } catch(e) {
