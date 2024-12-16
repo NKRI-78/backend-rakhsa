@@ -51,8 +51,11 @@ module.exports = {
                     ratings: ratings,
                     location: sosItem.location,
                     country: sosItem.country,
+                    ticket: chats.length == 0 
+                    ? "" 
+                    : `#${chats[0].id}`,
                     chat_id: chats.length == 0 
-                    ? '-' 
+                    ? "-" 
                     : chats[0].uid,
                     lat: sosItem.lat,
                     lng: sosItem.lng,

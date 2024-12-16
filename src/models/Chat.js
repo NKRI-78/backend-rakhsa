@@ -4,7 +4,7 @@ module.exports = {
 
     checkConversation: (senderId, receiverId) => {
         return new Promise((resolve, reject) => {
-            const query = `SELECT uid FROM chats 
+            const query = `SELECT id, uid FROM chats 
             WHERE sender_id = ? AND receiver_id = ?
             OR receiver_id = ? AND sender_id = ?`
 
