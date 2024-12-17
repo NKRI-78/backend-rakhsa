@@ -27,7 +27,9 @@ module.exports = {
             for (const i in sos) {
                 var sosItem = sos[i]
 
-                var chats = await Chat.checkConversation(sosItem.user_id, sosItem.user_agent_id)
+                var chats = await Chat.checkConversationBySosId(
+                    sosItem.uid
+                )
 
                 var sender = await User.getUser(sosItem.user_id)
                 var agent = await User.getUser(sosItem.user_agent_id)

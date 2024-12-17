@@ -17,6 +17,20 @@ module.exports = {
             })
         })
     },
+
+    checkConversationBySosId: (sosId) => {
+        return new Promise((resolve, reject) => {
+            const query = `SELECT id, uid FROM chats WHERE sos_id = ?`
+
+            conn.query(query, [sosId], (e, result) => {
+                if(e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+    },
     
     getChat: (chatId, senderId) => {
         return new Promise ((resolve, reject) => {
