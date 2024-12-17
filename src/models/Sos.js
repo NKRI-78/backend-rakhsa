@@ -94,7 +94,7 @@ module.exports = {
 
     detail: (id) => {
         return new Promise((resolve, reject) => {
-            var query = `SELECT s.uid, s.location, s.media, st.name AS type, s.lat, s.lng, s.country, sat.name AS status, s.time, s.user_id, s.user_agent_id
+            var query = `SELECT s.uid, s.location, s.agent_note, s.media, st.name AS type, s.lat, s.lng, s.country, sat.name AS status, s.time, s.user_id, s.user_agent_id
                 FROM sos s 
                 INNER JOIN sos_types st ON st.id = s.sos_type
                 INNER JOIN sos_activity_types sat ON sat.id = s.sos_activity_type

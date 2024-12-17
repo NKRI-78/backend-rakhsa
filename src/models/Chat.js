@@ -20,23 +20,29 @@ module.exports = {
     
     getChat: (chatId, senderId) => {
         return new Promise ((resolve, reject) => {
-            const query = `SELECT c.uid AS chat_id, 
-            c.sos_id, 
-            c.id AS ticket,
-            sat.name AS status,
-            s.agent_note AS note, 
-            p.user_id, 
-            p.fullname, 
-            p.avatar
-            FROM chats c
-            INNER JOIN users u ON (c.sender_id = u.uid OR c.receiver_id = u.uid)
-            INNER JOIN profiles p ON p.user_id = u.uid
-            INNER JOIN sos s ON s.uid = c.sos_id
-            INNER JOIN sos_activity_types sat ON sat.id = s.sos_activity_type
-            WHERE 
-                (c.sender_id = ? AND c.receiver_id = p.user_id)
-                OR (c.receiver_id = ? AND c.sender_id = p.user_id)
-                AND c.uid = ?
+            const query = `SELECT 
+                    c.uid AS chat_id, 
+                    MAX(c.sos_id) AS sos_id, -- Distinct sos_id for each chat_id
+                    c.id AS ticket,
+                    sat.name AS status, 
+                    s.agent_note as note,
+                    p.user_id, 
+                    p.fullname, 
+                    p.avatar
+                FROM chats c
+                INNER JOIN users u ON (c.sender_id = u.uid OR c.receiver_id = u.uid)
+                INNER JOIN profiles p ON p.user_id = u.uid
+                INNER JOIN sos s ON s.uid = c.sos_id
+                INNER JOIN sos_activity_types sat ON sat.id = s.sos_activity_type
+                WHERE 
+                    (
+                        (c.sender_id = ? AND c.receiver_id = p.user_id) 
+                        OR 
+                        (c.receiver_id = ? AND c.sender_id = p.user_id)
+                    )
+                    AND c.uid = ?
+                GROUP BY c.uid, c.id, sat.name, p.user_id, p.fullname, p.avatar
+                ORDER BY c.uid;
             ` 
             conn.query(query, [senderId, senderId, chatId], (e, result) => {
                 if(e) { 
