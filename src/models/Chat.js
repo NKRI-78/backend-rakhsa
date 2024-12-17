@@ -89,7 +89,8 @@ module.exports = {
                 (c.sender_id = ? AND c.receiver_id = p.user_id) 
                 OR (c.receiver_id = ? AND c.sender_id = p.user_id)
             )
-            AND s.sos_activity_type IN (3, 5)`
+            AND s.sos_activity_type IN (3, 5) 
+            ORDER BY c.id DESC`
             if(isAgent) {
                 query = `SELECT 
                 c.uid AS chat_id, 
@@ -109,7 +110,9 @@ module.exports = {
                 WHERE (
                     (c.sender_id = ? AND c.receiver_id = p.user_id) 
                     OR (c.receiver_id = ? AND c.sender_id = p.user_id)
-                )`
+                )
+                ORDER BY c.id DESC    
+                `
             }
             conn.query(query, [senderId, senderId], (e, result) => {
                 if(e) {
