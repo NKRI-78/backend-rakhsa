@@ -84,7 +84,7 @@ module.exports = {
     },
 
     formatDateWithSeconds: (date) => {
-        return moment(date).locale('id').format('yyyy-MM-DD H:mm:ss')
+        return moment(date).locale('id').format('yyyy-MM-DD')
     },
 
     formatDateByName: (date) => {
