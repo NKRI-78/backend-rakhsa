@@ -152,10 +152,10 @@ module.exports = {
         })
     },
 
-    update: (id, title, desc, lat, lng) => {
+    update: (id, title, img, desc, lat, lng) => {
         return new Promise((resolve, reject) => {
-            var query = `UPDATE news SET title = ?, description = ?, lat = ?, lng = ? WHERE id = ?`
-            conn.query(query, [title, desc, lat, lng, id], (e, result) => {
+            var query = `UPDATE news SET title = ?, img = ?, description = ?, lat = ?, lng = ? WHERE id = ?`
+            conn.query(query, [title, img, desc, lat, lng, id], (e, result) => {
                 if (e) {
                     reject(new Error(e))
                 } else {
