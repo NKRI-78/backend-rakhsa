@@ -106,17 +106,22 @@ module.exports = {
     },
 
     update: async (req, res) => {
+        const { id } = req.params;
+
+        const { title, img, description, lat, lng } = req.body;
+
         try {   
 
-            if(typeof req.params.id == "undefined" || req.params.id == "")
+            if(typeof id == "undefined" || id == "")
                 throw new Error("Param id is required")
 
             await News.update(
-                req.params.id,
-                req.body.title, 
-                req.body.description,
-                req.body.lat, 
-                req.body.lng
+                id,
+                title, 
+                img,
+                description,
+                lat, 
+                lng
             )
 
             misc.response(res, 200, false, "")
