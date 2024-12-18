@@ -14,13 +14,7 @@ const News = require("./src/models/News")
 app.use(fileUpload())
 app.use(logger("dev"))
 app.use(helmet())
-app.use(cors(
-  {
-    origin:'http://localhost:5811', 
-    credentials:true,
-    optionSuccessStatus:200
-  }  
-))
+app.use(cors())
 app.use(compression())
 app.use(express.static("public"))
 app.use(bodyParser.urlencoded({ extended: true }))
