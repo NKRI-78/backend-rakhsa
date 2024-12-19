@@ -14,7 +14,11 @@ const News = require("./src/models/News")
 app.use(fileUpload())
 app.use(logger("dev"))
 app.use(helmet())
-app.use(cors())
+app.use(cors({
+  origin: 'https://report-raksha.inovatiftujuh8.com',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type'],
+}));
 app.use(compression())
 app.use(express.static("public"))
 app.use(bodyParser.urlencoded({ extended: true }))
