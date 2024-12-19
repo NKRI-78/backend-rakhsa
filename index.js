@@ -17,7 +17,8 @@ app.use(helmet())
 app.use(cors({
   origin: 'https://report-raksha.inovatiftujuh8.com',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type'],
+  allowedHeaders: ['Content-Type', 'Cache-Control'],
+  credentials: true
 }));
 app.use(compression())
 app.use(express.static("public"))
