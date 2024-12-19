@@ -13,7 +13,7 @@ const News = require("./src/models/News")
 
 app.use(fileUpload())
 app.use(logger("dev"))
-app.use(helmet())
+app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 app.use(cors({
   origin: "*",
   methods: 'GET,POST,PUT,DELETE',
