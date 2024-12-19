@@ -15,10 +15,9 @@ app.use(fileUpload())
 app.use(logger("dev"))
 app.use(helmet())
 app.use(cors({
-  origin: 'https://report-raksha.inovatiftujuh8.com',
+  origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Cache-Control'],
-  credentials: true
 }));
 app.use(compression())
 app.use(express.static("public"))
