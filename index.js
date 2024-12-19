@@ -7,14 +7,14 @@ const helmet = require("helmet")
 const app = express()
 const config = require("./src/configs/configs")
 const port = config.port
-// const cors = require("cors")
+const cors = require("cors")
 const routerNav = require("./src/index")
 const News = require("./src/models/News")
 
 app.use(fileUpload())
 app.use(logger("dev"))
 app.use(helmet())
-// app.use(cors({ origin: '*' }));
+app.use(cors());
 app.use(compression())
 app.use(express.static("public"))
 app.use(bodyParser.urlencoded({ extended: true }))
