@@ -16,8 +16,8 @@ app.use(logger("dev"))
 app.use(helmet())
 app.use(cors({
   origin: '*',
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Cache-Control'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Cache-Control', 'Accept'],
 }));
 app.use(compression())
 app.use(express.static("public"))
