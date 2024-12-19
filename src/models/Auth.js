@@ -4,24 +4,35 @@ module.exports = {
 
     login: (val) => {
         return new Promise((resolve, reject) => {
-            var query = `SELECT u.uid, u.email, u.phone, u.password, u.enabled, p.fullname, r.name AS role
-            FROM users u 
-            INNER JOIN profiles p ON p.user_id = u.uid
-            INNER JOIN user_roles ur ON ur.user_id = p.user_id
-            INNER JOIN roles r ON r.id = ur.role_id 
-            WHERE email = ? OR username = ?`
-            
-            console.log(query)
+            const query = `
+                SELECT 
+                    u.uid, u.email, u.phone, u.password, u.enabled, 
+                    p.fullname, r.name AS role
+                FROM 
+                    users u
+                INNER JOIN 
+                    profiles p ON p.user_id = u.uid
+                INNER JOIN 
+                    user_roles ur ON ur.user_id = p.user_id
+                INNER JOIN 
+                    roles r ON r.id = ur.role_id
+                WHERE 
+                    u.email = ? OR (u.username = ? OR u.phone = ?)
+            `;
 
-            conn.query(query, [val, val], (e, result) => {
-                if (e) {
-                    reject(new Error(e))
+            console.log(val)
+            
+            conn.query(query, [val, val, val], (error, results) => {
+                if (error) {
+                    reject(new Error(error.message));
                 } else {
-                    resolve(result)
+                    // Resolve with query results
+                    resolve(results);
                 }
-            })
-        })
+            });
+        });
     },
+    
 
     registerMember: (userId, otp, email, phone, password) => {
         return new Promise((resolve, reject) => {

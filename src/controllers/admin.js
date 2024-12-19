@@ -9,7 +9,7 @@ const { v4: uuidv4 } = require('uuid')
 
 module.exports = {
 
-    listUser: async (req, res) => {
+    listUser: async (_, res) => {
         try {
 
             var users = await User.listUser()
