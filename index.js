@@ -15,7 +15,9 @@ app.use(fileUpload())
 app.use(logger("dev"))
 app.use(helmet())
 app.use(cors({
-  origin: "*"
+  origin: "*",
+  methods: 'GET,POST,PUT,DELETE',
+  allowedHeaders: 'Content-Type, Authorization',
 }));
 app.use(compression())
 app.use(express.static("public"))
