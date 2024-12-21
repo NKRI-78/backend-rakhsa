@@ -111,6 +111,7 @@ module.exports = {
                     (c.sender_id = ? AND c.receiver_id = p.user_id) 
                     OR (c.receiver_id = ? AND c.sender_id = p.user_id)
                 )
+                AND s.sos_activity_type IN (3) 
                 ORDER BY c.id DESC    
                 `
             }
