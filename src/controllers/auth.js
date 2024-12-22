@@ -50,6 +50,8 @@ module.exports = {
                 authorized: true
             }
 
+            await Auth.updateIsLoggedIn(login[0].uid, "login")
+
             var token = jwt.sign(payload, process.env.SECRET_KEY)
             var refreshToken = jwt.sign(payload, process.env.SECRET_KEY)
 
