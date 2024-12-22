@@ -356,4 +356,24 @@ module.exports = {
         }
     },
 
+    IsLoggedIn: async (req, res) => {
+        const { user_id, type } = req.body
+
+        try {
+
+            if(typeof user_id == "undefined" || user_id == "")
+                throw new Error("Field user_id is required")
+
+            if(typeof type == "undefined" || type == "")
+                throw new Error("Field type is required")
+
+            await Auth.updateIsLoggedIn(user_id, type)
+
+            misc.response(res, 200, false, "")
+        } catch(e) {
+            console.log(e)
+            misc.response(res, 400, true, e.message)
+        }
+    },  
+
 }

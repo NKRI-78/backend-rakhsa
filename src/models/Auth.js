@@ -136,7 +136,21 @@ module.exports = {
             })
         })
     },
-    
+
+    createUser: (userId, email, username, phone, password) => {
+        return new Promise((resolve, reject) => {
+            var query = `INSERT INTO users (uid, email, username, phone, password) 
+            VALUES (?, ?, ?, ?, ?)`
+            conn.query(query, [userId, email, username, phone, password], (e, result) => {
+                if (e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+    }, 
+
     updateOtp: (otp, email) => {
         return new Promise((resolve, reject) => {
             const query = `UPDATE users 
@@ -152,18 +166,17 @@ module.exports = {
         })
     },
 
-    createUser: (userId, email, username, phone, password) => {
+    updateIsLoggedIn: (userId, type) => {
         return new Promise((resolve, reject) => {
-            var query = `INSERT INTO users (uid, email, username, phone, password) 
-            VALUES (?, ?, ?, ?, ?)`
-            conn.query(query, [userId, email, username, phone, password], (e, result) => {
+            const query = `UPDATE users SET is_logged_in = ? WHERE uid = ?`
+            conn.query(query, [type == "login" ? 1 : 0, userId], (e, res) => {
                 if (e) {
                     reject(new Error(e))
                 } else {
-                    resolve(result)
+                    resolve(res)
                 }
             })
         })
-    }, 
+    }
 
 }

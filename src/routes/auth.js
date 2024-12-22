@@ -7,6 +7,7 @@ Route
     .post("/register-member", auth.registerMember)
     .post("/register-amulet", auth.registerAmulet)
     .post("/register-kbri", auth.registerKbri)
+    .post("/is-logged-in", auth.IsLoggedIn)
     .post("/verify-otp", auth.verifyOtp)
     .post("/resend-otp", auth.resendOtp)
 
