@@ -62,7 +62,8 @@ module.exports = {
                     lat: sosItem.lat,
                     lng: sosItem.lng,
                     time: sosItem.time,
-                    created_at:  formatDateWithSeconds(sosItem.created_at),
+                    created: formatDateWithSeconds(sosItem.created_at),
+                    created_at: formatDateWithSeconds(sosItem.created_at),
                     status: sosItem.status,
                     platform_type: sosItem.platform,
                     sender: {
