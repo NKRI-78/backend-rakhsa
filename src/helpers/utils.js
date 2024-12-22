@@ -72,19 +72,19 @@ module.exports = {
     },
 
     formatYearAndMonth(date) {
-        return moment(date).locale('id').format('yyyy/MM')
+        return moment(date).locale('id').format('YYYY/MM')
     },
 
     formatDate: (date) => {
-        return moment(date).locale('id').format('yyyy/MM/DD')
+        return moment(date).locale('id').format('YYYY/MM/DD')
     },
 
     formatDateWithSubtractDays: (date, d) => {
-        return moment(date).subtract(d, 'days').locale('id').format('yyyy/MM/DD')
+        return moment(date).subtract(d, 'days').locale('id').format('YYYY/MM/DD')
     },
 
     formatDateWithSeconds: (date) => {
-        return moment(date).locale('id').format('yyyy-MM-DD')
+        return moment(date).locale('id').format('YYYY-MM-DD')
     },
 
     formatDateByName: (date) => {
