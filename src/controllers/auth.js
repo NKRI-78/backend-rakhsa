@@ -345,7 +345,7 @@ module.exports = {
         }
     },
 
-    registerKbri: async (req, res) => {
+    registerKbri: async (_, res) => {
         try {
 
             misc.response(res, 200, false, "")
