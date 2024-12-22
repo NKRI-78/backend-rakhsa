@@ -27,6 +27,9 @@ module.exports = {
             if(login.length == 0)
                 throw new Error("User not found")
 
+            if(login[0].is_logged_in == 1) 
+                throw new Error("Your account is already logged in on another device")
+
             if (login[0].enabled == 0) {
                 var otp = generateOTP()
                 await Promise.race([
@@ -286,6 +289,8 @@ module.exports = {
                         uid: checkOtpIsValid[0].uid,
                         authorized: true
                     }
+
+                    await Auth.updateIsLoggedIn(checkOtpIsValid[0].user_id, "login")
 
                     var token = jwt.sign(payload, process.env.SECRET_KEY)
                     var refreshToken = jwt.sign(payload, process.env.SECRET_KEY)

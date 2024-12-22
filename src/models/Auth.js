@@ -7,6 +7,7 @@ module.exports = {
             const query = `
                 SELECT 
                     u.uid, u.email, u.phone, u.password, u.enabled, 
+                    u.is_logged_in,
                     p.fullname, r.name AS role
                 FROM 
                     users u
