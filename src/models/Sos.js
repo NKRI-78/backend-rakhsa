@@ -167,6 +167,19 @@ module.exports = {
         })
     },
 
+    checkSosExpire: () => {
+        return new Promise((resolve, reject) => {
+            var query = `SELECT uid, TIMESTAMPDIFF(HOUR, created_at, NOW()) AS difference FROM sos`
+            conn.query(query, (e, result) => {
+                if (e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+    },
+
     checkExpireSos: (sosId) => {
         return new Promise((resolve, reject) => {
             var query = `SELECT uid FROM sos WHERE uid = ? 
@@ -183,7 +196,7 @@ module.exports = {
 
     expireSos: (sosId) => {
         return new Promise((resolve, reject) => {
-            var query = `UPDATE sos SET sos_activity_type = 6
+            var query = `UPDATE sos SET sos_activity_type = 5
             WHERE uid = ?`
             conn.query(query, [sosId], (e, result) => {
                 if (e) {
