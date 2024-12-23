@@ -183,7 +183,7 @@ module.exports = {
     checkExpireSos: (sosId) => {
         return new Promise((resolve, reject) => {
             var query = `SELECT uid FROM sos WHERE uid = ? 
-            AND sos_activity_type = 6`
+            AND sos_activity_type = 5`
             conn.query(query, [sosId], (e, result) => {
                 if (e) {
                     reject(new Error(e))
