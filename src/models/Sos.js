@@ -16,15 +16,15 @@ module.exports = {
                 AND s.platform_type = '${platformType == 'raksha' ? 1 : 2}'`
             }
 
-            if(type == "recently") {
-                query = `SELECT s.uid, s.location, p.name AS platform, s.created_at, s.media, st.name AS type, s.lat, s.lng, s.country, sat.name AS status, s.time, s.user_id, s.user_agent_id
-                FROM sos s
-                INNER JOIN sos_types st ON st.id = s.sos_type
-                INNER JOIN platforms p ON p.id = s.platform_type
-                INNER JOIN sos_activity_types sat ON sat.id = s.sos_activity_type
-                WHERE s.sos_activity_type = 2
-                AND s.platform_type = '${platformType == 'raksha' ? 1 : 2}'`
-            }
+            // if(type == "recently") {
+            //     query = `SELECT s.uid, s.location, p.name AS platform, s.created_at, s.media, st.name AS type, s.lat, s.lng, s.country, sat.name AS status, s.time, s.user_id, s.user_agent_id
+            //     FROM sos s
+            //     INNER JOIN sos_types st ON st.id = s.sos_type
+            //     INNER JOIN platforms p ON p.id = s.platform_type
+            //     INNER JOIN sos_activity_types sat ON sat.id = s.sos_activity_type
+            //     WHERE s.sos_activity_type = 2
+            //     AND s.platform_type = '${platformType == 'raksha' ? 1 : 2}'`
+            // }
 
             if(type == "process") {
                 query = `SELECT s.uid, s.location, p.name AS platform, s.created_at, s.media, st.name AS type, s.lat, s.lng, s.country, sat.name AS status, s.time, s.user_id, s.user_agent_id
@@ -32,7 +32,7 @@ module.exports = {
                 INNER JOIN sos_types st ON st.id = s.sos_type
                 INNER JOIN platforms p ON p.id = s.platform_type
                 INNER JOIN sos_activity_types sat ON sat.id = s.sos_activity_type
-                WHERE s.sos_activity_type = 3
+                WHERE s.sos_activity_type = 1
                 AND s.platform_type = '${platformType == 'raksha' ? 1 : 2}'`
             }
 
@@ -53,16 +53,6 @@ module.exports = {
                 INNER JOIN platforms p ON p.id = s.platform_type
                 INNER JOIN sos_activity_types sat ON sat.id = s.sos_activity_type
                 WHERE s.sos_activity_type = 5
-                AND s.platform_type = '${platformType == 'raksha' ? 1 : 2}'`
-            }
-
-            if(type == "expire") {
-                query = `SELECT s.uid, s.location, p.name AS platform, s.created_at, s.media, st.name AS type, s.lat, s.lng, s.country, sat.name AS status, s.time, s.user_id, s.user_agent_id
-                FROM sos s
-                INNER JOIN sos_types st ON st.id = s.sos_type
-                INNER JOIN platforms p ON p.id = s.platform_type
-                INNER JOIN sos_activity_types sat ON sat.id = s.sos_activity_type
-                WHERE s.sos_activity_type = 6
                 AND s.platform_type = '${platformType == 'raksha' ? 1 : 2}'`
             }
 
