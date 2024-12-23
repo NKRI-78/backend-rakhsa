@@ -30,8 +30,11 @@ module.exports = {
 
     initFcm: (token, userId) => {
         return new Promise((resolve, reject) => {
-            var query = `UPDATE fcms SET token = ? WHERE user_id = ?`
-            conn.query(query, [token, userId], (e, result) => {
+            var query = `INSERT INTO fcms (user_id, token) 
+            VALUES (?, ?) 
+            ON DUPLICATE KEY UPDATE 
+            token = VALUES(token)`
+            conn.query(query, [userId, token], (e, result) => {
                 if (e) {
                     reject(new Error(e))
                 } else {
