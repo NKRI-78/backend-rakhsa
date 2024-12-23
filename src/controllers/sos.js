@@ -226,7 +226,7 @@ module.exports = {
 
             var conversations = await Chat.checkConversationBySosId(id)
 
-            if(conversations.length == 0) 
+            if(conversations.length == 0)
                 throw new Error("Chat not found")
 
             var chatId = conversations[0].uid
