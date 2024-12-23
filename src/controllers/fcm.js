@@ -15,7 +15,7 @@ module.exports = {
                 throw new Error("Field token is required")
 
             await Profile.initFcm(
-                avatar,
+                token,
                 user_id, 
             )
 
