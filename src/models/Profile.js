@@ -26,6 +26,19 @@ module.exports = {
                 }
             })
         })
+    },
+
+    initFcm: (token, userId) => {
+        return new Promise((resolve, reject) => {
+            var query = `UPDATE fcms SET token = ? WHERE user_id = ?`
+            conn.query(query, [token, userId], (e, result) => {
+                if (e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
     }
 
 }
