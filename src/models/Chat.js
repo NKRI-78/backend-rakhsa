@@ -192,6 +192,7 @@ module.exports = {
             WHERE c.uid = ? 
             AND (m.sender_id = ? 
             OR m.receiver_id = ?)
+            AND m.is_expired = 0
             ORDER BY m.created_at DESC`
 
             if(isAgent == false) {
