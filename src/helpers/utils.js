@@ -6,7 +6,7 @@ const {
 
 const bcrypt = require("bcryptjs")
 const axios = require('axios')
-const moment = require('moment')
+const moment = require("moment-timezone")
 
 const { combine, timestamp, label, printf } = format
 

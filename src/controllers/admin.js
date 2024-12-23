@@ -1,6 +1,7 @@
 require("dotenv").config()
 
 const misc = require('../helpers/response')
+const utils = require("../helpers/utils")
 const Admin = require("../models/Admin")
 const Auth = require("../models/Auth")
 const User = require("../models/User")
@@ -28,6 +29,7 @@ module.exports = {
                     email: user.email,
                     phone: user.phone,
                     nik: user.nik,
+                    created_at: utils.formatDate(user.created_at),
                     emergency_contact: user.emergency_contact
                 })
             }

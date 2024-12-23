@@ -21,7 +21,7 @@ module.exports = {
 
     listUser: () => {
         return new Promise((resolve, reject) => {
-            var query = `SELECT u.uid AS user_id, p.fullname, COALESCE(p.avatar, '-') as avatar, COALESCE(p.address, '-') AS address, p.passport, 
+            var query = `SELECT u.uid AS user_id, p.fullname, u.created_at, COALESCE(p.avatar, '-') as avatar, COALESCE(p.address, '-') AS address, p.passport, 
                 COALESCE(p.nik, '-') AS nik, p.avatar,
                 COALESCE(p.emergency_contact, '-') AS emergency_contact, u.email, COALESCE(u.username, '-') AS username, 
                 COALESCE(u.phone, '-') AS phone 
