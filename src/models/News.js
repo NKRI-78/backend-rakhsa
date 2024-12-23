@@ -27,7 +27,7 @@ module.exports = {
                     6371 * acos(
                         cos(radians(?)) * cos(radians(n.lat)) * cos(radians(n.lng) - radians(?)) + sin(radians(?)) * sin(radians(n.lat))
                     )
-                ) <= 3
+                ) <= 5
             `
 
             var values = []
