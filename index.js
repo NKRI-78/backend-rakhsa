@@ -1,15 +1,16 @@
 const express = require("express")
-const bodyParser = require("body-parser")
 const fileUpload = require("express-fileupload")
 const logger = require("morgan")
 const compression = require("compression")
+const cors = require("cors")
+const bodyParser = require("body-parser")
 const helmet = require("helmet")
 const app = express()
 const config = require("./src/configs/configs")
 const port = config.port
-const cors = require("cors")
 const routerNav = require("./src/index")
 const News = require("./src/models/News")
+const Sos = require("./src/models/Sos")
 
 app.use(fileUpload())
 app.use(logger("dev"))
@@ -31,7 +32,7 @@ var CronJob = require('cron').CronJob
 // 0 */10 * * * * Every 10 minutes
 // 00 00 00 * * * Midgnight
 
-const job = new CronJob('0 */5 * * * *', async () => {
+const checkEwsJob = new CronJob('0 */30 * * * *', async () => {
 
   var ews = await News.checkEws()
 
@@ -48,7 +49,25 @@ const job = new CronJob('0 */5 * * * *', async () => {
 
 })
 
-job.start()
+const checkSosJob = new CronJob('0 */30 * * * *', async () => {
+
+  var sos = await Sos.checkSosExpire()
+
+  for (const i in sos) {
+    var item = sos[i]
+
+    var id = item.uid 
+    var difference = item.difference
+
+    if(difference > 24) {
+      await Sos.expireSos(id)
+    }    
+  }
+
+})
+
+checkEwsJob.start()
+checkSosJob.start()
 
 const server = app.listen(port, () => {
   console.log(`\n\t *** Server listening on PORT ${port}  ***`)

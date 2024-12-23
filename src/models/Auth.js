@@ -21,8 +21,6 @@ module.exports = {
                     u.email = ? OR (u.username = ? OR u.phone = ?)
             `;
 
-            console.log(val)
-            
             conn.query(query, [val, val, val], (error, results) => {
                 if (error) {
                     reject(new Error(error.message));

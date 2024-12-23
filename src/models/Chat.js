@@ -20,7 +20,7 @@ module.exports = {
 
     checkConversationBySosId: (sosId) => {
         return new Promise((resolve, reject) => {
-            const query = `SELECT id, uid FROM chats WHERE sos_id = ?`
+            const query = `SELECT uid FROM chats WHERE sos_id = ?`
 
             conn.query(query, [sosId], (e, result) => {
                 if(e) {
@@ -144,25 +144,11 @@ module.exports = {
         })
     },
 
-    updateExpireMessagesSender: (senderId, receiverId) => {
+    updateExpireMessages: (chatId) => {
         return new Promise ((resolve, reject) => {
-            var query = `UPDATE messages SET is_expired = 1 WHERE sender_id = ? AND receiver_id = ?`
+            var query = `UPDATE messages SET is_expired = 1 WHERE chat_id = ?`
 
-            conn.query(query, [senderId, receiverId], (e, result) => {
-                if(e) {
-                    reject(new Error(e))
-                } else {
-                    resolve(result)
-                }
-            })
-        })
-    },
-
-    updateExpireMessagesReceiver: (receiverId, senderId) => {
-        return new Promise ((resolve, reject) => {
-            var query = `UPDATE messages SET is_expired = 1 WHERE sender_id = ? AND receiver_id = ?`
-
-            conn.query(query, [receiverId, senderId], (e, result) => {
+            conn.query(query, [chatId], (e, result) => {
                 if(e) {
                     reject(new Error(e))
                 } else {
@@ -174,24 +160,6 @@ module.exports = {
 
     getMessages: (chatId, sender, isAgent) => {
         return new Promise ((resolve, reject) => {
-            // const query = `SELECT 
-            // m.uid,
-            // u.name AS sender_name,
-            // m.sender_id, m.receiver_id,
-            // m.sent_time, m.content, m.image, 
-            // emt.name type, m.is_read
-            // FROM messages m 
-            // LEFT JOIN products p ON m.product_id = p.uid
-            // LEFT JOIN soft_delete_messages sdm ON sdm.message_id = m.uid
-            // INNER JOIN users u ON m.sender_id = u.uid
-            // INNER JOIN chats c ON c.uid = m.chat_id
-            // INNER JOIN enum_message_types emt ON emt.uid = m.type
-            // WHERE c.uid = '${chatId}' 
-            // AND (m.sender_id = '${sender}' 
-            // OR m.receiver_id = '${sender}')
-            // AND (sdm.message_id IS NULL OR sdm.user_id != '${sender}')
-            // ORDER BY m.sent_time DESC`
-
             var query = `SELECT 
             p.fullname AS sender_name,
             p.avatar,
@@ -204,8 +172,8 @@ module.exports = {
             INNER JOIN message_acks ma ON ma.id = m.ack
             INNER JOIN message_types mt ON mt.id = m.type
             WHERE c.uid = ? 
-            AND (m.sender_id = ? 
-            OR m.receiver_id = ?)
+            AND (m.sender_id = ? OR m.receiver_id = ?)
+            AND m.is_expired = 0
             ORDER BY m.created_at DESC`
 
             if(isAgent == false) {
@@ -221,8 +189,7 @@ module.exports = {
                 INNER JOIN message_acks ma ON ma.id = m.ack
                 INNER JOIN message_types mt ON mt.id = m.type
                 WHERE c.uid = ? 
-                AND (m.sender_id = ? 
-                OR m.receiver_id = ?)
+                AND (m.sender_id = ? OR m.receiver_id = ?)
                 AND m.is_expired = 0
                 ORDER BY m.created_at DESC`
             }

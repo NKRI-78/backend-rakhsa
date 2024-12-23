@@ -12,29 +12,29 @@ module.exports = {
                 INNER JOIN sos_types st ON st.id = s.sos_type
                 INNER JOIN platforms p ON p.id = s.platform_type
                 INNER JOIN sos_activity_types sat ON sat.id = s.sos_activity_type
-                WHERE s.sos_activity_type = 1
+                WHERE s.sos_activity_type IN (1, 2, 3) 
                 AND s.platform_type = '${platformType == 'raksha' ? 1 : 2}'`
             }
 
-            if(type == "recently") {
-                query = `SELECT s.uid, s.location, p.name AS platform, s.created_at, s.media, st.name AS type, s.lat, s.lng, s.country, sat.name AS status, s.time, s.user_id, s.user_agent_id
-                FROM sos s
-                INNER JOIN sos_types st ON st.id = s.sos_type
-                INNER JOIN platforms p ON p.id = s.platform_type
-                INNER JOIN sos_activity_types sat ON sat.id = s.sos_activity_type
-                WHERE s.sos_activity_type = 2
-                AND s.platform_type = '${platformType == 'raksha' ? 1 : 2}'`
-            }
+            // if(type == "recently") {
+            //     query = `SELECT s.uid, s.location, p.name AS platform, s.created_at, s.media, st.name AS type, s.lat, s.lng, s.country, sat.name AS status, s.time, s.user_id, s.user_agent_id
+            //     FROM sos s
+            //     INNER JOIN sos_types st ON st.id = s.sos_type
+            //     INNER JOIN platforms p ON p.id = s.platform_type
+            //     INNER JOIN sos_activity_types sat ON sat.id = s.sos_activity_type
+            //     WHERE s.sos_activity_type = 2
+            //     AND s.platform_type = '${platformType == 'raksha' ? 1 : 2}'`
+            // }
 
-            if(type == "process") {
-                query = `SELECT s.uid, s.location, p.name AS platform, s.created_at, s.media, st.name AS type, s.lat, s.lng, s.country, sat.name AS status, s.time, s.user_id, s.user_agent_id
-                FROM sos s
-                INNER JOIN sos_types st ON st.id = s.sos_type
-                INNER JOIN platforms p ON p.id = s.platform_type
-                INNER JOIN sos_activity_types sat ON sat.id = s.sos_activity_type
-                WHERE s.sos_activity_type = 3
-                AND s.platform_type = '${platformType == 'raksha' ? 1 : 2}'`
-            }
+            // if(type == "process") {
+            //     query = `SELECT s.uid, s.location, p.name AS platform, s.created_at, s.media, st.name AS type, s.lat, s.lng, s.country, sat.name AS status, s.time, s.user_id, s.user_agent_id
+            //     FROM sos s
+            //     INNER JOIN sos_types st ON st.id = s.sos_type
+            //     INNER JOIN platforms p ON p.id = s.platform_type
+            //     INNER JOIN sos_activity_types sat ON sat.id = s.sos_activity_type
+            //     WHERE s.sos_activity_type = 1
+            //     AND s.platform_type = '${platformType == 'raksha' ? 1 : 2}'`
+            // }
 
             if(type == "resolved") {
                 query = `SELECT s.uid, s.location, p.name AS platform, s.created_at, s.media, st.name AS type, s.lat, s.lng, s.country, sat.name AS status, s.time, s.user_id, s.user_agent_id
@@ -53,16 +53,6 @@ module.exports = {
                 INNER JOIN platforms p ON p.id = s.platform_type
                 INNER JOIN sos_activity_types sat ON sat.id = s.sos_activity_type
                 WHERE s.sos_activity_type = 5
-                AND s.platform_type = '${platformType == 'raksha' ? 1 : 2}'`
-            }
-
-            if(type == "expire") {
-                query = `SELECT s.uid, s.location, p.name AS platform, s.created_at, s.media, st.name AS type, s.lat, s.lng, s.country, sat.name AS status, s.time, s.user_id, s.user_agent_id
-                FROM sos s
-                INNER JOIN sos_types st ON st.id = s.sos_type
-                INNER JOIN platforms p ON p.id = s.platform_type
-                INNER JOIN sos_activity_types sat ON sat.id = s.sos_activity_type
-                WHERE s.sos_activity_type = 6
                 AND s.platform_type = '${platformType == 'raksha' ? 1 : 2}'`
             }
 
@@ -112,7 +102,7 @@ module.exports = {
 
     checkSos: (sosId) => {
         return new Promise((resolve, reject) => {
-            var query = `SELECT user_id, user_agent_id FROM sos WHERE uid = ?`
+            var query = `SELECT uid FROM sos WHERE uid = ?`
             conn.query(query, [sosId], (e, result) => {
                 if (e) {
                     reject(new Error(e))
@@ -177,10 +167,23 @@ module.exports = {
         })
     },
 
+    checkSosExpire: () => {
+        return new Promise((resolve, reject) => {
+            var query = `SELECT uid, TIMESTAMPDIFF(HOUR, created_at, NOW()) AS difference FROM sos`
+            conn.query(query, (e, result) => {
+                if (e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+    },
+
     checkExpireSos: (sosId) => {
         return new Promise((resolve, reject) => {
             var query = `SELECT uid FROM sos WHERE uid = ? 
-            AND sos_activity_type = 6`
+            AND sos_activity_type = 5`
             conn.query(query, [sosId], (e, result) => {
                 if (e) {
                     reject(new Error(e))
@@ -193,7 +196,7 @@ module.exports = {
 
     expireSos: (sosId) => {
         return new Promise((resolve, reject) => {
-            var query = `UPDATE sos SET sos_activity_type = 6
+            var query = `UPDATE sos SET sos_activity_type = 5
             WHERE uid = ?`
             conn.query(query, [sosId], (e, result) => {
                 if (e) {
