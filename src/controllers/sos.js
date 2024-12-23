@@ -217,27 +217,21 @@ module.exports = {
             var checkSos = await Sos.checkSos(id)
 
             if(checkSos.length == 0) 
-                throw new Error("Sos not found")
-
-            var senderId = checkSos[0].user_id 
-            var recipientId = checkSos[0].user_agent_id
+                throw new Error("SOS not found")
 
             var checkExpireSos = await Sos.checkExpireSos(id)
 
             if(checkExpireSos.length == 1)
-                throw new Error("Sos already finish")
+                throw new Error("SOS already finish")
 
-            await Sos.expireSos(id)
+            var conversations = await Chat.checkConversationBySosId(id)
 
-            await Chat.updateExpireMessagesSender(
-                senderId, 
-                recipientId
-            )
+            if(conversations.length == 0) 
+                throw new Error("Chat not found")
 
-            await Chat.updateExpireMessagesReceiver(
-                recipientId,
-                senderId
-            )
+            var chatId = conversations[0].uid
+
+            await Chat.updateExpireMessages(chatId)
 
             misc.response(res, 200, false, "", null)
         } catch(e) {

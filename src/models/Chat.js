@@ -20,7 +20,7 @@ module.exports = {
 
     checkConversationBySosId: (sosId) => {
         return new Promise((resolve, reject) => {
-            const query = `SELECT id, uid FROM chats WHERE sos_id = ?`
+            const query = `SELECT uid FROM chats WHERE sos_id = ?`
 
             conn.query(query, [sosId], (e, result) => {
                 if(e) {
@@ -144,25 +144,11 @@ module.exports = {
         })
     },
 
-    updateExpireMessagesSender: (senderId, receiverId) => {
+    updateExpireMessages: (chatId) => {
         return new Promise ((resolve, reject) => {
-            var query = `UPDATE messages SET is_expired = 1 WHERE sender_id = ? AND receiver_id = ?`
+            var query = `UPDATE messages SET is_expired = 1 WHERE chat_id = ?`
 
-            conn.query(query, [senderId, receiverId], (e, result) => {
-                if(e) {
-                    reject(new Error(e))
-                } else {
-                    resolve(result)
-                }
-            })
-        })
-    },
-
-    updateExpireMessagesReceiver: (receiverId, senderId) => {
-        return new Promise ((resolve, reject) => {
-            var query = `UPDATE messages SET is_expired = 1 WHERE sender_id = ? AND receiver_id = ?`
-
-            conn.query(query, [receiverId, senderId], (e, result) => {
+            conn.query(query, [chatId], (e, result) => {
                 if(e) {
                     reject(new Error(e))
                 } else {

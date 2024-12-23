@@ -102,7 +102,7 @@ module.exports = {
 
     checkSos: (sosId) => {
         return new Promise((resolve, reject) => {
-            var query = `SELECT user_id, user_agent_id FROM sos WHERE uid = ?`
+            var query = `SELECT uid FROM sos WHERE uid = ?`
             conn.query(query, [sosId], (e, result) => {
                 if (e) {
                     reject(new Error(e))
