@@ -6,88 +6,6 @@ const moment = require('moment-timezone')
 
 module.exports = {
 
-    messages: async (req, res) => {
-
-        const { sender_id, chat_id, is_agent } = req.body
-    
-        try {
-
-            if(typeof sender_id == "undefined" || sender_id == "")
-                throw new Error("Field sender_id is required")
-    
-            if(typeof chat_id == "undefined" || chat_id == "")
-                throw new Error("Field chat_id is required")
-        
-            var recipients = await Chat.getChat(
-                chat_id,
-                sender_id,
-            )
-    
-            if(recipients.length == 0)
-                throw new Error("Recipient not found")
-    
-            var recipient = recipients[0]
-    
-            var messages = await Chat.getMessages(
-                chat_id, 
-                sender_id,
-                is_agent
-            )
-    
-            var messageData = []
-    
-            for (const i in messages) {
-                var message = messages[i]
-    
-                messageData.push({
-                    id: message.msg_id,
-                    chat_id: chat_id,
-                    user: {
-                        id: message.sender_id,
-                        avatar: message.avatar ?? "-",
-                        name: message.sender_name,
-                        is_me: sender_id == message.sender_id 
-                        ? true 
-                        : false  
-                    },
-                    is_read: message.ack == "READ"
-                    ? true 
-                    : false,
-                    created_at: moment(message.created_at).format('YYYY-MM-DD HH:mm:ss'),
-                    sent_time: moment(message.created_at).format('HH:mm'),
-                    text: message.content
-                })
-            }
-    
-            misc.response(res, 200, false, "", {
-                id: `#${recipient.ticket}`,
-                chat_id: chat_id,
-                sos_id: recipient.sos_id,
-                status: recipient.status,
-                note: recipient.note ?? "",
-                recipient: {
-                    id: recipient.user_id,
-                    avatar: recipient.avatar ?? "-",
-                    name: recipient.fullname,
-                    is_typing: false,
-                    is_online: recipient.is_online == 1 
-                    ? true 
-                    : false,
-                    last_active: moment(recipient.last_active).format('YYYY-MM-DD HH:mm:ss')
-                },
-                messages: messageData
-            })
-    
-        } catch(e) {
-    
-            console.log(e)
-
-            misc.response(res, 400, true, e.message, null)
-    
-        }
-    },
-
-
     list: async (req, res) => {
 
         const { user_id, is_agent } = req.body
@@ -156,6 +74,87 @@ module.exports = {
             console.log(e)
             misc.response(res, 400, true, e.message, null)
         }
-    }
+    },
+
+    messages: async (req, res) => {
+
+        const { sender_id, chat_id } = req.body
+    
+        try {
+
+            if(typeof sender_id == "undefined" || sender_id == "")
+                throw new Error("Field sender_id is required")
+    
+            if(typeof chat_id == "undefined" || chat_id == "")
+                throw new Error("Field chat_id is required")
+        
+            var recipients = await Chat.getChat(
+                chat_id,
+                sender_id,
+            )
+    
+            if(recipients.length == 0)
+                throw new Error("Recipient not found")
+    
+            var recipient = recipients[0]
+    
+            var messages = await Chat.getMessages(
+                chat_id, 
+                sender_id
+            )
+    
+            var messageData = []
+    
+            for (const i in messages) {
+                var message = messages[i]
+    
+                messageData.push({
+                    id: message.msg_id,
+                    chat_id: chat_id,
+                    user: {
+                        id: message.sender_id,
+                        avatar: message.avatar ?? "-",
+                        name: message.sender_name,
+                        is_me: sender_id == message.sender_id 
+                        ? true 
+                        : false  
+                    },
+                    is_read: message.ack == "READ"
+                    ? true 
+                    : false,
+                    created_at: moment(message.created_at).format('YYYY-MM-DD HH:mm:ss'),
+                    sent_time: moment(message.created_at).format('HH:mm'),
+                    text: message.content
+                })
+            }
+    
+            misc.response(res, 200, false, "", {
+                id: `#${recipient.ticket}`,
+                chat_id: chat_id,
+                sos_id: recipient.sos_id,
+                status: recipient.status,
+                note: recipient.note ?? "",
+                recipient: {
+                    id: recipient.user_id,
+                    avatar: recipient.avatar ?? "-",
+                    name: recipient.fullname,
+                    is_typing: false,
+                    is_online: recipient.is_online == 1 
+                    ? true 
+                    : false,
+                    last_active: moment(recipient.last_active).format('YYYY-MM-DD HH:mm:ss')
+                },
+                messages: messageData
+            })
+    
+        } catch(e) {
+    
+            console.log(e)
+
+            misc.response(res, 400, true, e.message, null)
+    
+        }
+    },
+
 
 }
