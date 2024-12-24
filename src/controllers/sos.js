@@ -5,9 +5,25 @@ const Sos = require('../models/Sos')
 const User = require('../models/User')
 const Chat = require('../models/Chat')
 
-const { formatDateWithSeconds } = require('../helpers/utils')
+const { formatDateWithSos } = require('../helpers/utils')
 
 module.exports = {
+
+    allBadge: async (_, res) => {
+        try {
+            var badgeLive = await Sos.badgeLive()
+            var badgeResolved = await Sos.badgeResolved()
+            var badgeClosed = await Sos.badgeClosed()
+
+            misc.response(res, 200, false, "", {
+                live: badgeLive.length == 0 ? 0 : badgeLive[0].count,
+                resolved: badgeResolved.length == 0 ? 0 : badgeResolved[0].count,
+                closed: badgeClosed.length == 0 ? 0 : badgeClosed[0].count
+            })
+        } catch(e) {
+            misc.response(res, 400, true, e.message)
+        }
+    },
     
     list: async (req, res) => {
         const { type, platform_type } = req.query
@@ -62,8 +78,8 @@ module.exports = {
                     lat: sosItem.lat,
                     lng: sosItem.lng,
                     time: sosItem.time,
-                    created: formatDateWithSeconds(sosItem.created_at),
-                    created_at: formatDateWithSeconds(sosItem.created_at),
+                    created: formatDateWithSos(sosItem.created_at),
+                    created_at: formatDateWithSos(sosItem.created_at),
                     status: sosItem.status,
                     platform_type: sosItem.platform,
                     sender: {

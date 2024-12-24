@@ -5,6 +5,7 @@ const sos = require("../controllers/sos")
 Route
     .get("/", sos.list)
     .get("/:id", sos.detail)
+    .post("/all-badge", sos.allBadge)
     .post("/rating", sos.ratingSos)
     .post("/close", sos.closeSos)
     .post("/move-to-recently", sos.moveSosToRecently)
