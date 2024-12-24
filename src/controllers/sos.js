@@ -8,6 +8,22 @@ const Chat = require('../models/Chat')
 const { formatDateWithSos } = require('../helpers/utils')
 
 module.exports = {
+
+    allBadge: async (_, res) => {
+        try {
+            var badgeLive = await Sos.badgeLive()
+            var badgeResolved = await Sos.badgeResolved()
+            var badgeClosed = await Sos.badgeClosed()
+
+            misc.response(res, 200, false, "", {
+                live: badgeLive.length,
+                resolved: badgeResolved.length,
+                closed: badgeClosed.length
+            })
+        } catch(e) {
+            misc.response(res, 400, true, e.message)
+        }
+    },
     
     list: async (req, res) => {
         const { type, platform_type } = req.query

@@ -2,6 +2,69 @@ const conn = require('../configs/db')
 
 module.exports = {
 
+    badgeLive: () => {
+        return new Promise((resolve, reject) => {
+            var query = `SELECT 
+                sos_activity_type AS sos_type,
+                COUNT(*) AS count
+            FROM 
+                sos
+            WHERE 
+                sos_activity_type = 3
+            GROUP BY 
+                sos_activity_type`
+            conn.query(query, (e, result) => {
+                if (e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+    },
+
+    badgeResolved: () => {
+        return new Promise((resolve, reject) => {
+            var query = `SELECT 
+                sos_activity_type AS sos_type,
+                COUNT(*) AS count
+            FROM 
+                sos
+            WHERE 
+                sos_activity_type = 4
+            GROUP BY 
+                sos_activity_type`
+            conn.query(query, (e, result) => {
+                if (e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+    },
+
+    badgeClosed: () => {
+        return new Promise((resolve, reject) => {
+            var query = `SELECT 
+                sos_activity_type AS sos_type,
+                COUNT(*) AS count
+            FROM 
+                sos
+            WHERE 
+                sos_activity_type = 5
+            GROUP BY 
+                sos_activity_type`
+            conn.query(query, (e, result) => {
+                if (e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+    },
+
     list: (type, platformType) => {
         return new Promise((resolve, reject) => {
             var query
