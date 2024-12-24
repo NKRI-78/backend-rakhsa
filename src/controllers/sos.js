@@ -16,9 +16,9 @@ module.exports = {
             var badgeClosed = await Sos.badgeClosed()
 
             misc.response(res, 200, false, "", {
-                live: badgeLive.length,
-                resolved: badgeResolved.length,
-                closed: badgeClosed.length
+                live: badgeLive.length == 0 ? 0 : badgeLive[0].count,
+                resolved: badgeResolved.length == 0 ? 0 : badgeResolved[0].count,
+                closed: badgeClosed.length == 0 ? 0 : badgeClosed[0].count
             })
         } catch(e) {
             misc.response(res, 400, true, e.message)
