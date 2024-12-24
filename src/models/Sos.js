@@ -31,7 +31,7 @@ module.exports = {
             FROM 
                 sos
             WHERE 
-                sos_activity_type = 4
+                sos_activity_type IN (4)
             GROUP BY 
                 sos_activity_type`
             conn.query(query, (e, result) => {
@@ -52,7 +52,7 @@ module.exports = {
             FROM 
                 sos
             WHERE 
-                sos_activity_type = 5
+                sos_activity_type IN (5)
             GROUP BY 
                 sos_activity_type`
             conn.query(query, (e, result) => {
