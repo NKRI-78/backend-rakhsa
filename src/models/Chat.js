@@ -176,7 +176,7 @@ module.exports = {
             AND m.is_expired = 0
             ORDER BY m.created_at DESC`
 
-            if(isAgent == false) {
+            if(isAgent == true) {
                 query = `SELECT 
                 p.fullname AS sender_name,
                 p.avatar,
@@ -190,7 +190,6 @@ module.exports = {
                 INNER JOIN message_types mt ON mt.id = m.type
                 WHERE c.uid = ? 
                 AND (m.sender_id = ? OR m.receiver_id = ?)
-                AND m.is_expired = 0
                 ORDER BY m.created_at DESC`
             }
 
