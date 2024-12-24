@@ -78,7 +78,7 @@ module.exports = {
 
     messages: async (req, res) => {
 
-        const { sender_id, chat_id } = req.body
+        const { sender_id, chat_id, is_agent, status } = req.body
     
         try {
 
@@ -100,7 +100,9 @@ module.exports = {
     
             var messages = await Chat.getMessages(
                 chat_id, 
-                sender_id
+                sender_id,
+                is_agent,
+                status
             )
     
             var messageData = []
