@@ -113,6 +113,19 @@ module.exports = {
         })
     },
 
+    checkSosIsRunning: (userId) => {
+        return new Promise((resolve, reject) => {
+            var query = `SELECT uid FROM sos WHERE sos_activity_type IN (3)`
+            conn.query(query, [userId], (e, result) => {
+                if (e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+    },
+
     ratingSos: (sosId, rate, userId) => {
         return new Promise((resolve, reject) => {
             var query = `INSERT INTO sos_ratings (sos_id, rate, user_id) 

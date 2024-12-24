@@ -3,6 +3,7 @@ const Profile = require("../models/Profile")
 const misc = require("../helpers/response")
 const User = require("../models/User")
 const { fdate } = require("../helpers/utils")
+const Sos = require("../models/Sos")
 
 module.exports = {
 
@@ -22,6 +23,11 @@ module.exports = {
 
             var user = users[0]
 
+            var checkSosIsRunning = await Sos.checkSosIsRunning(user_id)
+
+            var sosId = checkSosIsRunning.length == 0 ? "-" : checkSosIsRunning[0].uid
+            var sosIsRunning = checkSosIsRunning.length == 0 ? false : true
+
             misc.response(res, 200, false, "", {
                 id: user.user_id,
                 username: user.username,
@@ -31,7 +37,11 @@ module.exports = {
                 passport: user.passport ?? "-",
                 contact: user.contact ?? "-",
                 emergency_contact: user.emergency_contact ?? "-",
-                created_at: fdate(user.created_at)
+                created_at: fdate(user.created_at),
+                sos: {
+                    id: sosId,
+                    running: sosIsRunning
+                }
             })
         } catch(e) {
             console.log(e)
