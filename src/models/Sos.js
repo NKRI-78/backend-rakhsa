@@ -182,7 +182,8 @@ module.exports = {
             FROM sos s
             INNER JOIN chats c 
             ON c.sos_id = s.uid
-            WHERE s.sos_activity_type IN (3)`
+            WHERE s.sos_activity_type IN (3) 
+            AND s.user_id = ?`
             conn.query(query, [userId], (e, result) => {
                 if (e) {
                     reject(new Error(e))
