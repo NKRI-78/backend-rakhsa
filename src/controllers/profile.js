@@ -26,6 +26,7 @@ module.exports = {
             var checkSosIsRunning = await Sos.checkSosIsRunning(user_id)
 
             var sosId = checkSosIsRunning.length == 0 ? "-" : checkSosIsRunning[0].uid
+            var chatId = checkSosIsRunning.length == 0 ? "-" : checkSosIsRunning[0].chat_id
             var sosIsRunning = checkSosIsRunning.length == 0 ? false : true
 
             misc.response(res, 200, false, "", {
@@ -40,6 +41,7 @@ module.exports = {
                 created_at: fdate(user.created_at),
                 sos: {
                     id: sosId,
+                    chat_id: chatId,
                     running: sosIsRunning
                 }
             })

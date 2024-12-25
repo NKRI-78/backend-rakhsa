@@ -178,7 +178,11 @@ module.exports = {
 
     checkSosIsRunning: (userId) => {
         return new Promise((resolve, reject) => {
-            var query = `SELECT uid FROM sos WHERE sos_activity_type IN (3)`
+            var query = `SELECT s.uid, c.chat_id 
+            FROM sos s
+            INNER JOIN chats c 
+            ON c.sos_id = s.uid
+            WHERE s.sos_activity_type IN (3)`
             conn.query(query, [userId], (e, result) => {
                 if (e) {
                     reject(new Error(e))
