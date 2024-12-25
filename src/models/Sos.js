@@ -178,7 +178,7 @@ module.exports = {
 
     checkSosIsRunning: (userId) => {
         return new Promise((resolve, reject) => {
-            var query = `SELECT s.uid, c.chat_id 
+            var query = `SELECT s.uid, c.uid as chat_id 
             FROM sos s
             INNER JOIN chats c 
             ON c.sos_id = s.uid
