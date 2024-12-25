@@ -27,6 +27,7 @@ module.exports = {
 
             var sosId = checkSosIsRunning.length == 0 ? "-" : checkSosIsRunning[0].uid
             var chatId = checkSosIsRunning.length == 0 ? "-" : checkSosIsRunning[0].chat_id
+            var recipientId = checkSosIsRunning.length == 0 ? "-" : checkSosIsRunning[0].receiver_id
             var sosIsRunning = checkSosIsRunning.length == 0 ? false : true
 
             misc.response(res, 200, false, "", {
@@ -42,6 +43,7 @@ module.exports = {
                 sos: {
                     id: sosId,
                     chat_id: chatId,
+                    recipient_id: recipientId,
                     running: sosIsRunning
                 }
             })
