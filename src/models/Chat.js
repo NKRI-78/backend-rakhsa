@@ -144,12 +144,12 @@ module.exports = {
         })
     },
 
-    insertMessage: (msgId, chatId, sender, recipient, content) => {
+    insertMessage: (msgId, chatId, sender, recipient, content, createdAt) => {
         return new Promise((resolve, reject) => {
-            const query = `INSERT INTO messages (uid, chat_id, sender_id, receiver_id, content, ack, type)
-            VALUES (?, ?, ?, ?, ?, ?, ?)`
+            const query = `INSERT INTO messages (uid, chat_id, sender_id, receiver_id, content, ack, type, created_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
 
-            const values = [msgId, chatId, sender, recipient, content, 1, 1]
+            const values = [msgId, chatId, sender, recipient, content, 1, 1, createdAt]
             
             conn.query(query, values, (e, result) => {
                 if(e) {

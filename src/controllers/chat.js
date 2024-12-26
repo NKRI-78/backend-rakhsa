@@ -160,11 +160,11 @@ module.exports = {
     },
 
     insertMessage: async (req, res) => {
-        const { chat_id, sender, recipient, text } = req.body
+        const { chat_id, sender, recipient, text, created_at } = req.body
         const msgId = uuidv4()
 
         try {
-            await Chat.insertMessage(msgId, chat_id, sender, recipient, text)
+            await Chat.insertMessage(msgId, chat_id, sender, recipient, text, created_at)
 
             misc.response(res, 200, false, "", null)
         } catch(e) {
