@@ -1,4 +1,6 @@
 const Chat = require("../models/Chat")
+
+const { v4: uuidv4 } = require('uuid')
  
 const misc = require("../helpers/response")
 
