@@ -150,13 +150,27 @@ module.exports = {
             })
     
         } catch(e) {
-    
             console.log(e)
 
             misc.response(res, 400, true, e.message, null)
     
         }
     },
+
+    insertMessage: async (req, res) => {
+        const { chat_id, sender, recipient, text } = req.body
+        const msgId = uuidv4()
+
+        try {
+            await Chat.insertMessage(msgId, chat_id, sender, recipient, text)
+
+            misc.response(res, 200, false, "", null)
+        } catch(e) {
+            console.log(e)
+         
+            misc.response(res, 400, true, e.message, null)
+        }
+    }
 
 
 }

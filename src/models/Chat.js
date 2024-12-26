@@ -144,6 +144,23 @@ module.exports = {
         })
     },
 
+    insertMessage: (msgId, chatId, sender, recipient, content) => {
+        return new Promise((resolve, reject) => {
+            const query = `INSERT INTO messages (uid, chat_id, sender_id, receiver_id, content, ack, type)
+            VALUES (?, ?, ?, ?, ?, ?, ?)`
+
+            const values = [msgId, chatId, sender, recipient, content, 1, 1]
+            
+            conn.query(query, values, (e, result) => {
+                if(e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(result)
+                }
+            })
+        }) 
+    },
+
     updateExpireMessages: (chatId) => {
         return new Promise ((resolve, reject) => {
             var query = `UPDATE messages SET is_expired = 1 WHERE chat_id = ?`
