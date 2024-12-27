@@ -65,6 +65,20 @@ module.exports = {
         })
     },
 
+    checkAlreadyConfirmed: (userId) => {
+        return new Promise((resolve, reject) => {
+            const query = `SELECT id FROM sos WHERE sos_activity_type = 3 AND user_id = ?`
+
+            conn.query(query, [userId], (e, result) => {
+                if(e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+    },
+
     list: (type, platformType) => {
         return new Promise((resolve, reject) => {
             var query

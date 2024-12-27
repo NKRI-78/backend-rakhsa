@@ -24,6 +24,22 @@ module.exports = {
             misc.response(res, 400, true, e.message)
         }
     },
+
+    checkAlreadyConfirmed: async (_, res) => {
+        const { user_id } = req.body
+
+        try {
+            var checkAlreadyConfirmed = await Sos.checkAlreadyConfirmed(user_id)
+
+            misc.response(res, 200, false, "", {
+                confirmed: checkAlreadyConfirmed.length == 0 
+                ? false 
+                : true
+            })
+        } catch(e) {
+            misc.response(res, 400, true, e.message)
+        }
+    },
     
     list: async (req, res) => {
         const { type, platform_type } = req.query
