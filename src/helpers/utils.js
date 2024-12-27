@@ -14,12 +14,10 @@ const customFormat = printf(({ level, message, label, _ }) => {
     return `${moment().format('YYYY-MM-DD HH:mm:ss')} [${label}] ${level.toUpperCase()}: ${message}`
 })
 
-var date = moment().format('YYYY-MM-DD')
-
 var options = {
     file: {
         level: 'info',
-        filename: `${process.cwd()}/src/logs/${date}.log`,
+        filename: `${process.cwd()}/src/logs/${moment().format('YYYY-MM-DD')}.log`,
         handleExceptions: true,
         json: true,
         maxsize: 5242880, // 5 MB
@@ -149,16 +147,16 @@ module.exports = {
         return result;
     },
 
-    sendFCM: async (title, body, token, type, newsId, eventId) => {
+    sendFCM: async (title, body, token, type, data) => {
         await axios.post('https://api-fcm.inovatiftujuh8.com/api/v1/firebase/fcm', {
             token: token,
             title: title,
             body: body,
-            inbox_id: newsId,
-            inbox_type: type,
-            news_id: newsId,
-            event_id: eventId,
-            broadcast_type: type
+            broadcast_type: type,
+            message: data.message,
+            chat_id: data.chat_id, 
+            sos_id: data.sos_id,
+            recipient_id: data.recipient_id
         })
     },
     

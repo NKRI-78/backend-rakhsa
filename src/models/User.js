@@ -19,6 +19,39 @@ module.exports = {
         })
     },
 
+    
+    getProfile: (userId) => {
+        return new Promise((resolve, reject) => {
+            const query = `SELECT p.user_id, p.avatar, p.fullname AS username
+            FROM profiles p
+            WHERE p.user_id = ?`
+
+            conn.query(query, [userId], (e, result) => {
+                if(e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+    },
+
+    getFcm: (userId) => {
+        return new Promise((resolve, reject) => {
+            const query = `SELECT token 
+            FROM fcms 
+            WHERE user_id = ?`
+
+            conn.query(query, [userId], (e, result) => {
+                if(e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+    },
+
     listUser: () => {
         return new Promise((resolve, reject) => {
             var query = `SELECT u.uid AS user_id, p.fullname, u.created_at, COALESCE(p.avatar, '-') as avatar, COALESCE(p.address, '-') AS address, p.passport, 

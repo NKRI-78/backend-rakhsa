@@ -190,6 +190,67 @@ module.exports = {
         })
     },
 
+    moveSosToClosed: (sosId) => {
+        return new Promise((resolve, reject) => {
+            const query = `UPDATE sos SET sos_activity_type = 5 WHERE uid = ?`
+
+            conn.query(query, [sosId], (e, result) => {
+                if(e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+    },
+
+    updateExpireMessages: (chatId) => {
+        return new Promise ((resolve, reject) => {
+            var query = `UPDATE messages SET is_expired = 1 WHERE chat_id = ?`
+
+            conn.query(query, [chatId], (e, result) => {
+                if(e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+    },
+
+    approvalConfirm: (sosId, userAgentId) => {
+        return new Promise((resolve, reject) => {
+            const query = `UPDATE sos SET sos_activity_type = ?, 
+            user_agent_id = ? 
+            WHERE uid = ?`
+
+            conn.query(query, [3, userAgentId, sosId], (e, result) => {
+                if(e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+    },
+
+    findById: (sosId) => {
+        return new Promise((resolve, reject) => {
+            const query = `SELECT s.user_id, s.user_agent_id, sat.name AS status
+            FROM sos s
+            INNER JOIN sos_activity_types sat ON sat.id = s.sos_activity_type 
+            WHERE s.uid = ?`
+
+            conn.query(query, [sosId], (e, result) => {
+                if(e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+    },
+
     checkSosIsRunning: (userId) => {
         return new Promise((resolve, reject) => {
             var query = `SELECT s.uid, c.uid as chat_id, c.receiver_id
@@ -222,7 +283,7 @@ module.exports = {
         })
     },
 
-    resolveSos: (sosId) => {
+    resolvedSos: (sosId) => {
         return new Promise((resolve, reject) => {
             var query = `UPDATE sos SET sos_activity_type = 4 WHERE uid = ?`
             conn.query(query, [sosId], (e, result) => {

@@ -5,7 +5,10 @@ const Sos = require('../models/Sos')
 const User = require('../models/User')
 const Chat = require('../models/Chat')
 
+const { v4: uuidv4 } = require('uuid')
+
 const { formatDateWithSos } = require('../helpers/utils')
+const utils = require('../helpers/utils')
 
 module.exports = {
 
@@ -178,7 +181,7 @@ module.exports = {
     },
 
     ratingSos: async (req, res) => {
-        const { id, rate, user_id } = req.body
+        const { id, user_id, rate } = req.body
 
         try {
 
@@ -192,12 +195,77 @@ module.exports = {
                 throw new Error("Field user_id is required")
 
             await Sos.ratingSos(id, rate, user_id)
-            await Sos.resolveSos(id)
+            await Sos.resolvedSos(id)
+
+            const fcms = await User.getFcm(user_id)
+            const token = fcms.length === 0 ? "-" : fcms[0].token
+
+            await utils.sendFCM(
+                `Anda telah menyelesaikan kasus ini`,
+                `Terima kasih telah menggunakan layanan Raksha`, token, "resolved-sos",
+                {
+                    message: `Terima kasih telah menggunakan layanan Raksha`,
+                    sos_id: "-",
+                    chat_id: "-",
+                    recipient_id: "-"
+                }
+            )
 
             misc.response(res, 200, false, "", null)
         } catch(e) {
             console.log(e)
             misc.response(res, 400, true, e.message)
+        }
+    },
+
+    confirmSos: async (req, res) => {
+        const { id, user_agent_id } = req.body 
+
+        const chatId = uuidv4()
+
+        try {
+
+            if(typeof id == "undefined" || id == "")
+                throw new Error("Field user_agent_id is required")
+
+            if(typeof user_agent_id == "undefined" || user_agent_id == "")
+                throw new Error("Field user_agent_id is required")
+
+            const sos = await Sos.findById(id)
+            const senderId = sos.length === 0 ? '-' : sos[0].user_id
+
+            const agents = await User.getProfile(user_agent_id)
+            const agentId = agents.length === 0 ? "-" : agents[0].user_id
+            const agentName = agents.length === 0 ? "-" : agents[0].username
+
+            const users = await User.getProfile(senderId)
+            const senderName = users.length === 0 ? "-" : users[0].username
+
+            await Chat.insertChat(chatId, senderId, user_agent_id, id)
+            await Sos.approvalConfirm(id, user_agent_id)
+
+            const fcms = await User.getFcm(senderId)
+            const token = fcms.length === 0 ? "-" : fcms[0].token
+
+            await utils.sendFCM(
+                `${agentName} telah terhubung dengan Anda`, 
+                `Halo ${senderName}`, token, "confirm-sos",
+                {
+                    message: "",
+                    sos_id: id,
+                    chat_id: chatId,
+                    recipient_id: user_agent_id
+                }
+            );
+
+            misc.response(res, 200, false, "", {
+                sos_id: id,
+                chat_id: chatId,
+                agent_id: agentId,
+                agent_name: agentName
+            })
+        } catch(e) {
+            misc.response(res, 400, true, e.messsage)
         }
     },
 
@@ -211,6 +279,31 @@ module.exports = {
 
             if(typeof note == "undefined" || note == "")
                 throw new Error("Field note is required")
+
+            const sos = await Sos.findById(id)
+
+            const chats = await Chat.getChatBySosId(id)
+
+            const chatId = chats.length === 0 ? "-" : chats[0].uid
+
+            await Sos.moveSosToClosed(id)
+            await Sos.updateExpireMessages(chatId)
+        
+            const recipientId = sos.length === 0 ? "-" : sos[0].user_id
+
+            const fcms = await User.getFcm(recipientId)
+            const token = fcms.length === 0 ? "-" : fcms[0].token
+
+            await utils.sendFCM(
+                `${agentName} telah terhubung dengan Anda`, 
+                `Halo ${senderName}`, token, "closed-sos",
+                {
+                    message: note,
+                    sos_id: "-",
+                    chat_id: "-",
+                    recipient_id: "-"
+                }
+            );
 
             await Sos.closeSos(id, note)
 

@@ -155,7 +155,6 @@ module.exports = {
             console.log(e)
 
             misc.response(res, 400, true, e.message, null)
-    
         }
     },
 

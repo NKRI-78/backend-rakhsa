@@ -7,8 +7,9 @@ Route
     .get("/:id", sos.detail)
     .post("/all-badge", sos.allBadge)
     .post("/rating", sos.ratingSos)
-    .post("/check-already-confirmed", sos.checkAlreadyConfirmed)
+    .post("/confirm", sos.confirmSos)
     .post("/close", sos.closeSos)
+    .post("/check-already-confirmed", sos.checkAlreadyConfirmed)
     .post("/move-to-recently", sos.moveSosToRecently)
     .post("/expire", sos.expireSos)
 

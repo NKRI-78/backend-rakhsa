@@ -31,6 +31,23 @@ module.exports = {
             })
         })
     },
+
+    
+    getChatBySosId: (sosId) => {
+        return new Promise ((resolve, reject) => {
+            const query = `SELECT c.id AS ticket, c.uid
+            FROM chats c
+            WHERE c.sos_id = ?`
+
+            conn.query(query, [sosId], (e, result) => {
+                if(e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+    },
     
     getChat: (chatId, senderId) => {
         return new Promise ((resolve, reject) => {
@@ -293,6 +310,20 @@ module.exports = {
         })
     },
 
+    insertChat: (chatId, sender, recipient, sosId) => {
+        return new Promise((resolve, reject) => {
+            const query = `INSERT INTO chats (uid, sender_id, receiver_id, sos_id) 
+            VALUES (?, ?, ?, ?)`
+
+            conn.query(query, [chatId, sender, recipient, sosId], (e, result) => {
+                if(e) {
+                    reject(new Error(e))
+                } else {
+                    resolve(result)
+                }
+            })
+        })
+    },
 
     getContact: (userId) => {
         return new Promise ((resolve, reject) => {
