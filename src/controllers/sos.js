@@ -289,14 +289,18 @@ module.exports = {
             await Sos.moveSosToClosed(id)
             await Sos.updateExpireMessages(chatId)
         
+            const userId = sos.length === 0 ? "-" : sos[0].user_agent_id
             const recipientId = sos.length === 0 ? "-" : sos[0].user_id
 
             const fcms = await User.getFcm(recipientId)
             const token = fcms.length === 0 ? "-" : fcms[0].token
 
+            const agents = await User.getProfile(userId)
+            const agentName = agents.length === 0 ? "-" : agents[0].username
+
             await utils.sendFCM(
-                `${agentName} telah terhubung dengan Anda`, 
-                `Halo ${senderName}`, token, "closed-sos",
+                `${agentName} telah menutup kasus ini`, 
+                note, token, "closed-sos",
                 {
                     message: note,
                     sos_id: "-",
@@ -307,7 +311,9 @@ module.exports = {
 
             await Sos.closeSos(id, note)
 
-            misc.response(res, 200, false, "", null)
+            misc.response(res, 200, false, "", {
+                sos_id: id
+            })
         } catch(e) {
             console.log(e)
             misc.response(res, 400, true, e.message)
