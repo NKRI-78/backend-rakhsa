@@ -4,6 +4,9 @@ const misc = require('../helpers/response')
 const News = require("../models/News")
 
 const { fdate } = require("../helpers/utils")
+const User = require("../models/User")
+const utils = require("../helpers/utils")
+const escapeHTML = require("escape-html")
 
 module.exports = {
 
@@ -167,6 +170,21 @@ module.exports = {
 
             if(typeof lat == "undefined" || lat == "")
                 throw new Error("Field lat is required")
+
+            var fcms = await User.getFcmAll()
+
+            for (const i in fcms) {
+               var fcm = fcms[i]
+               var token = fcm.token
+
+               utils.sendFCM(title, escapeHTML(description), token, "ews", {
+                    message:"-",
+                    chat_id: "-", 
+                    sos_id: "-",
+                    recipient_id: "-"
+               })
+            }
+
 
             await News.insert(
                 title, 
