@@ -177,7 +177,7 @@ module.exports = {
                var fcm = fcms[i]
                var token = fcm.token
 
-               utils.sendFCM(title, escapeHTML(description), token, "ews", {
+               utils.sendFCM(title, utils.escapeHtml(description), token, "ews", {
                     message:"-",
                     chat_id: "-", 
                     sos_id: "-",
