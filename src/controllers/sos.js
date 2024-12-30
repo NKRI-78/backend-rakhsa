@@ -219,55 +219,58 @@ module.exports = {
     },
 
     confirmSos: async (req, res) => {
-        const { id, user_agent_id } = req.body 
-
-        const chatId = uuidv4()
-
+        const { id, user_agent_id } = req.body;
+    
+        if (!id || !user_agent_id) {
+            return misc.response(res, 400, true, "Both 'id' and 'user_agent_id' fields are required.");
+        }
+    
+        const chatId = uuidv4();
+    
         try {
-
-            if(typeof id == "undefined" || id == "")
-                throw new Error("Field user_agent_id is required")
-
-            if(typeof user_agent_id == "undefined" || user_agent_id == "")
-                throw new Error("Field user_agent_id is required")
-
-            const sos = await Sos.findById(id)
-            const senderId = sos.length === 0 ? '-' : sos[0].user_id
-
-            const agents = await User.getProfile(user_agent_id)
-            const agentId = agents.length === 0 ? "-" : agents[0].user_id
-            const agentName = agents.length === 0 ? "-" : agents[0].username
-
-            const users = await User.getProfile(senderId)
-            const senderName = users.length === 0 ? "-" : users[0].username
-
-            await Chat.insertChat(chatId, senderId, user_agent_id, id)
-            await Sos.approvalConfirm(id, user_agent_id)
-
-            const fcms = await User.getFcm(senderId)
-            const token = fcms.length === 0 ? "-" : fcms[0].token
-
+            const [sos, agents, users] = await Promise.all([
+                Sos.findById(id),
+                User.getProfile(user_agent_id),
+                User.getProfile((await Sos.findById(id))[0]?.user_id || "-")
+            ]);
+    
+            const senderId = sos[0]?.user_id || "-";
+            const agentId = agents[0]?.user_id || "-";
+            const agentName = agents[0]?.username || "-";
+            const senderName = users[0]?.username || "-";
+    
+            await Promise.all([
+                Chat.insertChat(chatId, senderId, user_agent_id, id),
+                Sos.approvalConfirm(id, user_agent_id)
+            ]);
+    
+            const fcms = await User.getFcm(senderId);
+            const token = fcms[0]?.token || "-";
+    
             await utils.sendFCM(
-                `${agentName} telah terhubung dengan Anda`, 
-                `Halo ${senderName}`, token, "confirm-sos",
+                `${agentName} telah terhubung dengan Anda`,
+                `Halo ${senderName}`,
+                token,
+                "confirm-sos",
                 {
-                    message: "testing",
+                    message: "confirm-sos",
                     sos_id: id,
                     chat_id: chatId,
                     recipient_id: user_agent_id
                 }
             );
-
+    
             misc.response(res, 200, false, "", {
                 sos_id: id,
                 chat_id: chatId,
                 agent_id: agentId,
                 agent_name: agentName
-            })
-        } catch(e) {
-            misc.response(res, 400, true, e.messsage)
+            });
+        } catch (e) {
+            misc.response(res, 400, true, e.message || "An error occurred.");
         }
     },
+    
 
     closeSos: async (req, res) => {
         const { id, note } = req.body 
