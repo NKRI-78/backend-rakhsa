@@ -27,9 +27,6 @@ module.exports = {
             if(login.length == 0)
                 throw new Error("User not found")
 
-            if(login[0].is_logged_in == 1) 
-                throw new Error("Your account is already logged in on another device")
-
             if (login[0].enabled == 0) {
                 var otp = generateOTP()
                 await Promise.race([

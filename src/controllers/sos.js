@@ -251,7 +251,7 @@ module.exports = {
                 `${agentName} telah terhubung dengan Anda`, 
                 `Halo ${senderName}`, token, "confirm-sos",
                 {
-                    message: "",
+                    message: "testing",
                     sos_id: id,
                     chat_id: chatId,
                     recipient_id: user_agent_id

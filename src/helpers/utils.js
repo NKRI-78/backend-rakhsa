@@ -148,16 +148,20 @@ module.exports = {
     },
 
     sendFCM: async (title, body, token, type, data) => {
-        await axios.post('https://api-fcm.inovatiftujuh8.com/api/v1/firebase/fcm', {
-            token: token,
-            title: title,
-            body: body,
-            broadcast_type: type,
-            message: data.message,
-            chat_id: data.chat_id, 
-            sos_id: data.sos_id,
-            recipient_id: data.recipient_id
-        })
+        try {
+            await axios.post('https://api-fcm.inovatiftujuh8.com/api/v1/firebase/fcm', {
+                token: token,
+                title: title,
+                body: body,
+                broadcast_type: type,
+                message: data.message,
+                chat_id: data.chat_id, 
+                sos_id: data.sos_id,
+                recipient_id: data.recipient_id
+            })
+        } catch(e) {
+            console.log(e)
+        }
     },
     
     getExcerpt(text, length) {
