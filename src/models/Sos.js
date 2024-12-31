@@ -90,7 +90,8 @@ module.exports = {
                 INNER JOIN platforms p ON p.id = s.platform_type
                 INNER JOIN sos_activity_types sat ON sat.id = s.sos_activity_type
                 WHERE s.sos_activity_type IN (1, 2, 3) 
-                AND s.platform_type = '${platformType == 'raksha' ? 1 : 2}'`
+                AND s.platform_type = '${platformType == 'raksha' ? 1 : 2}'
+                ORDER BY s.created_at DESC`
             }
 
             // if(type == "recently") {
@@ -120,7 +121,8 @@ module.exports = {
                 INNER JOIN platforms p ON p.id = s.platform_type
                 INNER JOIN sos_activity_types sat ON sat.id = s.sos_activity_type
                 WHERE s.sos_activity_type = 4
-                AND s.platform_type = '${platformType == 'raksha' ? 1 : 2}'`
+                AND s.platform_type = '${platformType == 'raksha' ? 1 : 2}'
+                ORDER BY s.created_at DESC`
             }
 
             if(type == "closed") {
@@ -129,8 +131,9 @@ module.exports = {
                 INNER JOIN sos_types st ON st.id = s.sos_type
                 INNER JOIN platforms p ON p.id = s.platform_type
                 INNER JOIN sos_activity_types sat ON sat.id = s.sos_activity_type
-                WHERE s.sos_activity_type = 5
-                AND s.platform_type = '${platformType == 'raksha' ? 1 : 2}'`
+                WHERE s.sos_activity_type IN(5, 6)
+                AND s.platform_type = '${platformType == 'raksha' ? 1 : 2}'
+                ORDER BY s.created_at DESC`
             }
 
             conn.query(query, (e, result) => {
