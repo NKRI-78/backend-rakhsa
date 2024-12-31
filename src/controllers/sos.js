@@ -181,48 +181,46 @@ module.exports = {
     },
 
     ratingSos: async (req, res) => {
-        const { id, user_id, rate } = req.body
-
+        const { id, user_id, rate } = req.body;
+    
         try {
-
-            if(typeof id == "undefined" || id == "")
-                throw new Error("Field id is required")
-
-            if(typeof rate == "undefined" || rate == "")
-                throw new Error("Field rate is required")
-        
-            if(typeof user_id == "undefined" || user_id == "")
-                throw new Error("Field user_id is required")
-
-            await Sos.ratingSos(id, rate, user_id)
-            await Sos.resolvedSos(id)
-
-            const fcms = await User.getFcm(user_id)
-            const token = fcms.length === 0 ? "-" : fcms[0].token
-
+            if (!id?.trim() || !rate?.trim() || !user_id?.trim()) {
+                throw new Error("Fields 'id', 'rate', and 'user_id' are required.");
+            }
+    
+            await Sos.ratingSos(id, rate, user_id);
+            await Sos.resolvedSos(id);
+    
+            const fcms = await User.getFcm(user_id);
+            const token = fcms[0]?.token || "-";
+    
+            // Send notification
             await utils.sendFCM(
                 `Anda telah menyelesaikan kasus ini`,
-                `Terima kasih telah menggunakan layanan Raksha`, token, "resolved-sos",
+                `Terima kasih telah menggunakan layanan Raksha`,
+                token,
+                "resolved-sos",
                 {
                     message: `Terima kasih telah menggunakan layanan Raksha`,
-                    sos_id: "-",
+                    sos_id: id,
                     chat_id: "-",
-                    recipient_id: "-"
+                    recipient_id: user_id
                 }
-            )
-
-            misc.response(res, 200, false, "", null)
-        } catch(e) {
-            console.log(e)
-            misc.response(res, 400, true, e.message)
+            );
+    
+            misc.response(res, 200, false, "SOS rated and resolved successfully.", null);
+        } catch (e) {
+            console.error("Error in ratingSos:", e);
+            misc.response(res, 400, true, e.message || "An unexpected error occurred.");
         }
     },
+    
 
     confirmSos: async (req, res) => {
         const { id, user_agent_id } = req.body;
     
         if (!id || !user_agent_id) {
-            return misc.response(res, 400, true, "Both 'id' and 'user_agent_id' fields are required.");
+            throw new Error( "Both 'id' and 'user_agent_id' fields are required.");
         }
     
         const chatId = uuidv4();
@@ -273,55 +271,59 @@ module.exports = {
     
 
     closeSos: async (req, res) => {
-        const { id, note } = req.body 
-
+        const { id, note } = req.body;
+    
         try {
-
-            if(typeof id == "undefined" || id == "")
-                throw new Error("Field id is required")
-
-            if(typeof note == "undefined" || note == "")
-                throw new Error("Field note is required")
-
-            const sos = await Sos.findById(id)
-
-            const chats = await Chat.getChatBySosId(id)
-
-            const chatId = chats.length === 0 ? "-" : chats[0].uid
-
-            await Sos.moveSosToClosed(id)
-            await Sos.updateExpireMessages(chatId)
-        
-            const userId = sos.length === 0 ? "-" : sos[0].user_agent_id
-            const recipientId = sos.length === 0 ? "-" : sos[0].user_id
-
-            const fcms = await User.getFcm(recipientId)
-            const token = fcms.length === 0 ? "-" : fcms[0].token
-
-            const agents = await User.getProfile(userId)
-            const agentName = agents.length === 0 ? "-" : agents[0].username
-
+            if (!id?.trim() || !note?.trim()) {
+                throw new Error("Fields 'id' and 'note' are required.");
+            }
+    
+            const sos = await Sos.findById(id);
+            if (!sos || sos.length === 0) {
+                throw new Error(`SOS with ID ${id} not found.`);
+            }
+    
+            const chats = await Chat.getChatBySosId(id);
+            const chatId = chats[0]?.uid || "-";
+    
+            await Sos.moveSosToClosed(id);
+            await Sos.updateExpireMessages(chatId);
+    
+            const userId = sos[0]?.user_agent_id || "-";
+            const recipientId = sos[0]?.user_id || "-";
+    
+            const [fcms, agents] = await Promise.all([
+                User.getFcm(recipientId),
+                User.getProfile(userId)
+            ]);
+    
+            const token = fcms[0]?.token || "-";
+            const agentName = agents[0]?.username || "Unknown Agent";
+    
             await utils.sendFCM(
-                `${agentName} telah menutup kasus ini`, 
-                note, token, "closed-sos",
+                `${agentName} telah menutup kasus ini`,
+                note,
+                token,
+                "closed-sos",
                 {
                     message: note,
-                    sos_id: "-",
-                    chat_id: "-",
-                    recipient_id: "-"
+                    sos_id: id,
+                    chat_id: chatId,
+                    recipient_id: recipientId
                 }
             );
-
-            await Sos.closeSos(id, note)
-
-            misc.response(res, 200, false, "", {
+    
+            await Sos.closeSos(id, note);
+    
+            misc.response(res, 200, false, "SOS closed successfully.", {
                 sos_id: id
-            })
-        } catch(e) {
-            console.log(e)
-            misc.response(res, 400, true, e.message)
+            });
+        } catch (e) {
+            console.error("Error in closeSos:", e);
+            misc.response(res, 400, true, e.message || "An unexpected error occurred.");
         }
     },
+    
 
     moveSosToRecently: async (req, res) => {
         const { id } = req.body 
