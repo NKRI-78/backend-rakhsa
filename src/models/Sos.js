@@ -296,7 +296,7 @@ module.exports = {
     closeSos: (sosId, note, handleby) => {
         return new Promise((resolve, reject) => {
             var query = `UPDATE sos SET sos_activity_type = 5, agent_note = ?, handle_by = ? WHERE uid = ?`
-            conn.query(query, [note, sosId, handleby], (e, result) => {
+            conn.query(query, [note, handleby, sosId], (e, result) => {
                 if (e) {
                     reject(new Error(e))
                 } else {
