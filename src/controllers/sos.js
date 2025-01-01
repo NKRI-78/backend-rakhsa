@@ -271,11 +271,11 @@ module.exports = {
     
 
     closeSos: async (req, res) => {
-        const { id, note } = req.body;
+        const { id, note, handleby } = req.body;
     
         try {
-            if (!id?.trim() || !note?.trim()) {
-                throw new Error("Fields 'id' and 'note' are required.");
+            if (!id?.trim() || !note?.trim() || !handleby?.trim()) {
+                throw new Error("Fields 'id' and 'note' and 'handleby' are required.");
             }
     
             const sos = await Sos.findById(id);
@@ -313,7 +313,7 @@ module.exports = {
                 }
             );
     
-            await Sos.closeSos(id, note);
+            await Sos.closeSos(id, note, handleby);
     
             misc.response(res, 200, false, "SOS closed successfully.", {
                 sos_id: id
