@@ -10,9 +10,7 @@ module.exports = {
             FROM 
                 sos
             WHERE 
-                sos_activity_type IN (1, 2, 3)
-            GROUP BY 
-                sos_activity_type`
+                sos_activity_type IN (1, 2, 3)`
             conn.query(query, (e, result) => {
                 if (e) {
                     reject(new Error(e))
@@ -31,9 +29,7 @@ module.exports = {
             FROM 
                 sos
             WHERE 
-                sos_activity_type IN (4)
-            GROUP BY 
-                sos_activity_type`
+                sos_activity_type IN (4)`
             conn.query(query, (e, result) => {
                 if (e) {
                     reject(new Error(e))
@@ -52,9 +48,7 @@ module.exports = {
             FROM 
                 sos
             WHERE 
-                sos_activity_type IN (5, 6)
-            GROUP BY 
-                sos_activity_type`
+                sos_activity_type IN (5, 6)`
             conn.query(query, (e, result) => {
                 if (e) {
                     reject(new Error(e))
