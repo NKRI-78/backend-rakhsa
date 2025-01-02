@@ -274,8 +274,8 @@ module.exports = {
         const { id, note, handleby } = req.body;
     
         try {
-            if (!id?.trim() || !note?.trim() || !handleby?.trim()) {
-                throw new Error("Fields 'id' and 'note' and 'handleby' are required.");
+            if (!id?.trim() || !note?.trim()) {
+                throw new Error("Fields 'id' and 'note' are required.");
             }
     
             const sos = await Sos.findById(id);
