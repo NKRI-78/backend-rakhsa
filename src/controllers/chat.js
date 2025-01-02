@@ -137,6 +137,7 @@ module.exports = {
                 chat_id: chat_id,
                 sos_id: recipient.sos_id,
                 status: recipient.status,
+                handleby: recipient.handleby,
                 note: recipient.note ?? "",
                 recipient: {
                     id: recipient.user_id,
