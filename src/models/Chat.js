@@ -57,7 +57,7 @@ module.exports = {
                     c.id AS ticket,
                     sat.name AS status, 
                     s.agent_note as note,
-                    s.handleby,
+                    s.handle_by,
                     p.user_id, 
                     p.fullname, 
                     p.avatar
