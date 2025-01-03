@@ -102,7 +102,7 @@ module.exports = {
                     sos_id: "",
                     status: "",
                     handleby: "",
-                    note: recipient.note ?? "",
+                    note: "",
                     recipient: {
                         id: "",
                         avatar: "",
