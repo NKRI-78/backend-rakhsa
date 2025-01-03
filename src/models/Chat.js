@@ -209,7 +209,7 @@ module.exports = {
             WHERE c.uid = ? 
             AND (m.sender_id = ? OR m.receiver_id = ?)
             AND m.is_expired = 0
-            ORDER BY m.created_at DESC`
+            ORDER BY m.created_at ASC`
 
             if(isAgent == true) {
                 query = `SELECT 
@@ -225,7 +225,7 @@ module.exports = {
                 INNER JOIN message_types mt ON mt.id = m.type
                 WHERE c.uid = ? 
                 AND (m.sender_id = ? OR m.receiver_id = ?)
-                ORDER BY m.created_at DESC`
+                ORDER BY m.created_at ASC`
             }
 
             if(status == "CLOSED") {
@@ -242,7 +242,7 @@ module.exports = {
                 INNER JOIN message_types mt ON mt.id = m.type
                 WHERE c.uid = ? 
                 AND (m.sender_id = ? OR m.receiver_id = ?)
-                ORDER BY m.created_at DESC`
+                ORDER BY m.created_at ASC`
             }
 
             conn.query(query, [

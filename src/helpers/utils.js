@@ -62,35 +62,35 @@ module.exports = {
     },
 
     fday: (date) => {
-        return moment(date).locale('id').format('dddd')
+        return moment(date).tz("Asia/Jakarta").format('dddd')
     },
 
     fdate: (date) => {
-        return moment(date).locale('id').format('dddd, DD MMM YYYY')
+        return moment(date).tz("Asia/Jakarta").format('dddd, DD MMM YYYY')
     },
 
     formatYearAndMonth(date) {
-        return moment(date).locale('id').format('YYYY/MM')
+        return moment(date).tz("Asia/Jakarta").format('YYYY/MM')
     },
 
     formatDate: (date) => {
-        return moment(date).locale('id').format('YYYY/MM/DD')
+        return moment(date).tz("Asia/Jakarta").format('YYYY/MM/DD')
     },
 
     formatDateWithSubtractDays: (date, d) => {
-        return moment(date).subtract(d, 'days').locale('id').format('YYYY/MM/DD')
+        return moment(date).subtract(d, 'days').tz("Asia/Jakarta").format('YYYY/MM/DD')
     },
 
     formatDateWithSos: (date) => {
-        return moment(date).locale('id').format('yyyy-MM-DD')
+        return moment(date).tz("Asia/Jakarta").format('yyyy-MM-DD')
     },
 
     formatDateWithSeconds: (date) => {
-        return moment(date).locale('id').format('yyyy/MM/DD H:mm:ss')
+        return moment(date).tz("Asia/Jakarta").format('YYYY-MM-DD HH:mm:ss')
     },
 
     formatDateByName: (date) => {
-        return moment(date).locale('id').format('DD MMM YYYY')
+        return moment(date).tz("Asia/Jakarta").format('DD MMM YYYY')
     },
   
     convertRp: (val) => {

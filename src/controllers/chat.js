@@ -47,7 +47,7 @@ module.exports = {
                         is_typing: false,
                         is_me: isMe,
                         type: message.type,
-                        time: moment(message.created_at).format('HH:mm')
+                        time: moment(message.created_at).tz("Asia/Jakarta").format('HH:mm')
                     })
                 }
     
@@ -59,7 +59,7 @@ module.exports = {
                     sos_id: chat.sos_id,
                     status: chat.status,
                     note: chat.note ?? "",
-                    created_at: moment(chat.created_at).format('HH:mm'),
+                    created_at: moment(chat.created_at).tz("Asia/Jakarta").format('HH:mm'),
                     user: {
                         id: chat.user_id,
                         avatar: chat.avatar ?? "-",
@@ -95,8 +95,25 @@ module.exports = {
                 sender_id,
             )
     
-            if(recipients.length == 0)
-                throw new Error("Recipient not found")
+            if(recipients.length == 0) {
+                misc.response(res, 200, false, "", {
+                    id: "",
+                    chat_id: chat_id,
+                    sos_id: "",
+                    status: "",
+                    handleby: "",
+                    note: recipient.note ?? "",
+                    recipient: {
+                        id: "",
+                        avatar: "",
+                        name: "",
+                        is_typing: false,
+                        is_online: false,
+                        last_active: moment().tz("Asia/Jakarta").format('YYYY-MM-DD HH:mm:ss')
+                    },
+                    messages: []
+                })
+            }
     
             var recipient = recipients[0]
     
@@ -126,8 +143,8 @@ module.exports = {
                     is_read: message.ack == "READ"
                     ? true 
                     : false,
-                    created_at: moment(message.created_at).format('YYYY-MM-DD HH:mm:ss'),
-                    sent_time: moment(message.created_at).format('HH:mm'),
+                    created_at: moment(message.created_at).tz("Asia/Jakarta").format('YYYY-MM-DD HH:mm:ss'),
+                    sent_time: moment(message.created_at).tz("Asia/Jakarta").format('HH:mm'),
                     text: message.content
                 })
             }
@@ -147,7 +164,7 @@ module.exports = {
                     is_online: recipient.is_online == 1 
                     ? true 
                     : false,
-                    last_active: moment(recipient.last_active).format('YYYY-MM-DD HH:mm:ss')
+                    last_active: moment(recipient.last_active).tz("Asia/Jakarta").format('YYYY-MM-DD HH:mm:ss')
                 },
                 messages: messageData
             })
